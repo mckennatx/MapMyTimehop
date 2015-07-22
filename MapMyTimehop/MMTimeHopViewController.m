@@ -94,7 +94,9 @@
 }
 
 
-/*sets to previous month*/
+/* Returns NSDate to previous month, year, etc.
+ * @param diff is a timeDiff enum that is either 1 month, 1 year, 2 year, or 3 years ago
+ */
 - (NSDate *)previousDate:(timeDiff)diff {
 	NSDate *today = [[NSDate alloc] init];
 	NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
@@ -102,7 +104,7 @@
 	if(diff == kOneMonth)
 		[offsetComponents setMonth:-1]; // setting date to 1 month ago
 	else
-		[offsetComponents setYear:-diff];
+		[offsetComponents setYear:-diff]; // setting year to diff
 	NSDate *date = [gregorian dateByAddingComponents:offsetComponents toDate:today options:0];
 	
 	return date;
@@ -167,7 +169,7 @@
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-	TableHeaderView *view = [TableHeaderView headerWithTitle:self.tableHeaders[section]];
+	TableHeaderView *view = [TableHeaderView headerWithTitle:@"One Month Ago"];
 	return view;
 }
 
@@ -191,7 +193,7 @@
 		cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.rowHeight)];
 	}
 	
-	NSDictionary *data = self.tableData[indexPath.section][indexPath.row];
+	//NSDictionary *data = self.tableData[indexPath.section][indexPath.row];
 	
 	cell.textLabel.text = @"test";
 	

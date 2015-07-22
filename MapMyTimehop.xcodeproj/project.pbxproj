@@ -13,6 +13,9 @@
 		9E8AC8FD1B5E990F005BF836 /* anon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E8AC8FB1B5E990F005BF836 /* anon@3x.png */; };
 		9E8AC9031B5E9E4F005BF836 /* AFNetworking in Resources */ = {isa = PBXBuildFile; fileRef = 9E8AC9021B5E9E4F005BF836 /* AFNetworking */; };
 		9E8AC92D1B602638005BF836 /* WorkoutToDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E8AC92C1B602638005BF836 /* WorkoutToDisplay.m */; };
+		9E8AC9311B6049D6005BF836 /* NotificationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E8AC9301B6049D6005BF836 /* NotificationModel.m */; };
+		9E8AC9341B6049FC005BF836 /* LocalNotificationView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E8AC9331B6049FC005BF836 /* LocalNotificationView.m */; };
+		9E8AC9371B604A0F005BF836 /* LocalNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E8AC9361B604A0F005BF836 /* LocalNotificationController.m */; };
 		9E9453781B5D779C00BC8A53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9453771B5D779C00BC8A53 /* main.m */; };
 		9E94537B1B5D779C00BC8A53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E94537A1B5D779C00BC8A53 /* AppDelegate.m */; };
 		9E9453831B5D779C00BC8A53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E9453821B5D779C00BC8A53 /* Images.xcassets */; };
@@ -50,6 +53,12 @@
 		9E8AC9021B5E9E4F005BF836 /* AFNetworking */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AFNetworking; sourceTree = "<group>"; };
 		9E8AC92B1B602638005BF836 /* WorkoutToDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkoutToDisplay.h; sourceTree = "<group>"; };
 		9E8AC92C1B602638005BF836 /* WorkoutToDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkoutToDisplay.m; sourceTree = "<group>"; };
+		9E8AC92F1B6049D6005BF836 /* NotificationModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NotificationModel.h; sourceTree = "<group>"; };
+		9E8AC9301B6049D6005BF836 /* NotificationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationModel.m; sourceTree = "<group>"; };
+		9E8AC9321B6049FC005BF836 /* LocalNotificationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNotificationView.h; sourceTree = "<group>"; };
+		9E8AC9331B6049FC005BF836 /* LocalNotificationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNotificationView.m; sourceTree = "<group>"; };
+		9E8AC9351B604A0F005BF836 /* LocalNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNotificationController.h; sourceTree = "<group>"; };
+		9E8AC9361B604A0F005BF836 /* LocalNotificationController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LocalNotificationController.m; sourceTree = "<group>"; };
 		9E9453721B5D779C00BC8A53 /* MapMyTimehop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapMyTimehop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E9453761B5D779C00BC8A53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E9453771B5D779C00BC8A53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -102,6 +111,8 @@
 		9E8AC8EA1B5E8707005BF836 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				9E8AC9321B6049FC005BF836 /* LocalNotificationView.h */,
+				9E8AC9331B6049FC005BF836 /* LocalNotificationView.m */,
 				9E8AC8EE1B5E8768005BF836 /* TableHeaderView.h */,
 				9E8AC8EF1B5E8768005BF836 /* TableHeaderView.m */,
 			);
@@ -142,6 +153,8 @@
 		9E8AC92A1B602127005BF836 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				9E8AC92F1B6049D6005BF836 /* NotificationModel.h */,
+				9E8AC9301B6049D6005BF836 /* NotificationModel.m */,
 				9E8AC92B1B602638005BF836 /* WorkoutToDisplay.h */,
 				9E8AC92C1B602638005BF836 /* WorkoutToDisplay.m */,
 			);
@@ -216,6 +229,8 @@
 		9E9453AA1B5D9A8900BC8A53 /* ViewControllers */ = {
 			isa = PBXGroup;
 			children = (
+				9E8AC9351B604A0F005BF836 /* LocalNotificationController.h */,
+				9E8AC9361B604A0F005BF836 /* LocalNotificationController.m */,
 				9E9453B51B5DBF6900BC8A53 /* MMTimeHopViewController.h */,
 				9E9453B61B5DBF6900BC8A53 /* MMTimeHopViewController.m */,
 				9E9453B71B5DBF6900BC8A53 /* MMTimeHopViewController.xib */,
@@ -328,12 +343,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9E8AC9371B604A0F005BF836 /* LocalNotificationController.m in Sources */,
 				9E9453B31B5D9CC200BC8A53 /* UASDKConfig.m in Sources */,
 				9E9453AD1B5D9AB900BC8A53 /* UALoginViewController.m in Sources */,
 				9E8AC8F01B5E8768005BF836 /* TableHeaderView.m in Sources */,
 				9E94537B1B5D779C00BC8A53 /* AppDelegate.m in Sources */,
 				9E9453B81B5DBF6900BC8A53 /* MMTimeHopViewController.m in Sources */,
 				9E8AC92D1B602638005BF836 /* WorkoutToDisplay.m in Sources */,
+				9E8AC9341B6049FC005BF836 /* LocalNotificationView.m in Sources */,
+				9E8AC9311B6049D6005BF836 /* NotificationModel.m in Sources */,
 				9E9453781B5D779C00BC8A53 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
