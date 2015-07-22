@@ -12,6 +12,7 @@
 		9E8AC8FC1B5E990F005BF836 /* anon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E8AC8FA1B5E990F005BF836 /* anon@2x.png */; };
 		9E8AC8FD1B5E990F005BF836 /* anon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E8AC8FB1B5E990F005BF836 /* anon@3x.png */; };
 		9E8AC9031B5E9E4F005BF836 /* AFNetworking in Resources */ = {isa = PBXBuildFile; fileRef = 9E8AC9021B5E9E4F005BF836 /* AFNetworking */; };
+		9E8AC92D1B602638005BF836 /* WorkoutToDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E8AC92C1B602638005BF836 /* WorkoutToDisplay.m */; };
 		9E9453781B5D779C00BC8A53 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9453771B5D779C00BC8A53 /* main.m */; };
 		9E94537B1B5D779C00BC8A53 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E94537A1B5D779C00BC8A53 /* AppDelegate.m */; };
 		9E9453831B5D779C00BC8A53 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9E9453821B5D779C00BC8A53 /* Images.xcassets */; };
@@ -47,6 +48,8 @@
 		9E8AC8FA1B5E990F005BF836 /* anon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anon@2x.png"; sourceTree = "<group>"; };
 		9E8AC8FB1B5E990F005BF836 /* anon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anon@3x.png"; sourceTree = "<group>"; };
 		9E8AC9021B5E9E4F005BF836 /* AFNetworking */ = {isa = PBXFileReference; lastKnownFileType = folder; path = AFNetworking; sourceTree = "<group>"; };
+		9E8AC92B1B602638005BF836 /* WorkoutToDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkoutToDisplay.h; sourceTree = "<group>"; };
+		9E8AC92C1B602638005BF836 /* WorkoutToDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkoutToDisplay.m; sourceTree = "<group>"; };
 		9E9453721B5D779C00BC8A53 /* MapMyTimehop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapMyTimehop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E9453761B5D779C00BC8A53 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9E9453771B5D779C00BC8A53 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -122,7 +125,7 @@
 			name = Images;
 			sourceTree = "<group>";
 		};
-		9E9453691B5D779C00BC8A53 = {
+		9E8AC9291B6020FD005BF836 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
 				9E8AC8F11B5E885B005BF836 /* UIKit.framework */,
@@ -132,6 +135,23 @@
 				9E94539F1B5D7ED500BC8A53 /* libz.dylib */,
 				9E94539D1B5D7EB900BC8A53 /* Schemas.bundle */,
 				9E94539B1B5D7DF800BC8A53 /* UASDK.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		9E8AC92A1B602127005BF836 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				9E8AC92B1B602638005BF836 /* WorkoutToDisplay.h */,
+				9E8AC92C1B602638005BF836 /* WorkoutToDisplay.m */,
+			);
+			name = Models;
+			sourceTree = "<group>";
+		};
+		9E9453691B5D779C00BC8A53 = {
+			isa = PBXGroup;
+			children = (
+				9E8AC9291B6020FD005BF836 /* Frameworks */,
 				9E9453741B5D779C00BC8A53 /* MapMyTimehop */,
 				9E94538E1B5D779D00BC8A53 /* MapMyTimehopTests */,
 				9E9453731B5D779C00BC8A53 /* Products */,
@@ -150,6 +170,7 @@
 		9E9453741B5D779C00BC8A53 /* MapMyTimehop */ = {
 			isa = PBXGroup;
 			children = (
+				9E8AC92A1B602127005BF836 /* Models */,
 				9E8AC8F91B5E9907005BF836 /* Images */,
 				9E8AC8F41B5E932A005BF836 /* Libraries */,
 				9E8AC8EA1B5E8707005BF836 /* Views */,
@@ -312,6 +333,7 @@
 				9E8AC8F01B5E8768005BF836 /* TableHeaderView.m in Sources */,
 				9E94537B1B5D779C00BC8A53 /* AppDelegate.m in Sources */,
 				9E9453B81B5DBF6900BC8A53 /* MMTimeHopViewController.m in Sources */,
+				9E8AC92D1B602638005BF836 /* WorkoutToDisplay.m in Sources */,
 				9E9453781B5D779C00BC8A53 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

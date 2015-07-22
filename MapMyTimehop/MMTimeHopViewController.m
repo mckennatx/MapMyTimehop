@@ -11,6 +11,7 @@
 #import "UALoginViewController.h"
 #import "TableHeaderView.h"
 #import "AFNetworking/UIKit+AFNetworking/UIImageView+AFNetworking.h"
+#import "WorkoutToDisplay.h"
 
 @interface MMTimeHopViewController ()
 - (IBAction)logout:(id)sender;
@@ -25,30 +26,87 @@
 
 @end
 
-static BOOL reloading = NO;
-static const NSUInteger kWorkoutFetchAmount = 20;
-
 @implementation MMTimeHopViewController
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
 	self.tableHeaders = [self buildTableHeaders];
 	self.tableData = [self buildTableData];
-	UAEntityListRef *ref = [self createNewListRef];
-
-	NSLog(@"%@", ref);
-	
-//	NSURL *url = [NSURL URLWithString:[self avatarUrlForUserID:[UA sharedInstance].authenticatedUserRef.entityID]];
-	//[self.profileIcon setImageWithURL:url];
 
 	// Add a login block that will be called whenever
 	// the API failes and requires authentication.
 	[[UA sharedInstance] setUserAuthBlock:^(void) {
 		[self showLogin:YES];
 	}];
+
+}
+
+- (void)viewDidAppear:(BOOL)animated {
+	[super viewDidAppear:animated];
+	NSDate *date = [self previousDate:kOneMonth];
+	WorkoutToDisplay *oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	date = [self previousDate:kOneYear];
+	WorkoutToDisplay *oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	date = [self previousDate:kTwoYear];
+	WorkoutToDisplay *twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+}
+
+//This method should be called when setting up future notifications
+//add completion block
+- (void)pullWorkoutsWithBlock:(void (^)())complete
+{
+	NSDate *date = [self previousDate:kOneMonth];
+	_listArray = [NSMutableArray array];
+	_workoutListRef = [UAWorkoutListRef workoutListRefWithUserReference:[[UA sharedInstance] authenticatedUserRef] createdBefore:date];
+	
+	UAWorkoutManager *workoutManager = [[UA sharedInstance] workoutManager];
+
+	__block void (^requestBlock)(void);
+	
+	void(^responseBlock)(UAWorkoutList *list) = ^(UAWorkoutList *list){
+		BOOL nextPageAvailable = list.nextRef != nil;
+		
+		[_listArray addObject:list];
+		
+		if(nextPageAvailable) {
+			_workoutListRef = list.nextRef;
+			requestBlock();
+		}
+		else {
+			NSLog(@"no more workouts");
+			complete();
+		}
+	};
+	
+	requestBlock = ^{
+		[workoutManager fetchWorkoutsWithListRef:_workoutListRef
+										response:^(id object, NSError *error) {
+			if (!error) {
+				responseBlock((UAWorkoutList *)object);
+			}
+			else {
+				UALogError(@"Error retriving available workouts: %@", error);
+			}
+		}];
+	};
+	
+	requestBlock();
 }
 
 
+/*sets to previous month*/
+- (NSDate *)previousDate:(timeDiff)diff {
+	NSDate *today = [[NSDate alloc] init];
+	NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+	NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+	if(diff == kOneMonth)
+		[offsetComponents setMonth:-1]; // setting date to 1 month ago
+	else
+		[offsetComponents setYear:-diff];
+	NSDate *date = [gregorian dateByAddingComponents:offsetComponents toDate:today options:0];
+	
+	return date;
+}
 
 - (NSString *)avatarUrlForUserID:(NSString *)userID
 {
@@ -138,12 +196,6 @@ static const NSUInteger kWorkoutFetchAmount = 20;
 	cell.textLabel.text = @"test";
 	
 	return cell;
-}
-
-- (UAEntityListRef *)createNewListRef {
-	return [UAWorkoutListRef workoutListRefWithUserReference:[[UA sharedInstance] authenticatedUserRef]
-											   createdBefore:[NSDate dateWithTimeIntervalSinceNow:60*60*24]];
-	
 }
 
 #pragma mark - Menu Generation Methods
