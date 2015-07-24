@@ -8,7 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-
 @class MMTimeHopViewController;
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>

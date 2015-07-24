@@ -1,19 +1,19 @@
 //
-//  MapMyTimehopTests.m
-//  MapMyTimehopTests
+//  MapMyTimeHopTests.m
+//  MapMyTimeHopTests
 //
-//  Created by Lauren Mckenna on 7/20/15.
-//
+//  Created by Lauren Mckenna on 7/24/15.
+//  Copyright (c) 2015 Lauren Mckenna. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
 
-@interface MapMyTimehopTests : XCTestCase
+@interface MapMyTimeHopTests : XCTestCase
 
 @end
 
-@implementation MapMyTimehopTests
+@implementation MapMyTimeHopTests
 
 - (void)setUp {
     [super setUp];

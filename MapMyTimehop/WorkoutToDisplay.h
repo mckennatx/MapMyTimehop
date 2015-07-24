@@ -17,5 +17,4 @@
 
 - (instancetype)initWithFilterDate:(NSDate *)filter;
 
-
 @end

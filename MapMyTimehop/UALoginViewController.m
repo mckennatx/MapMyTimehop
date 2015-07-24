@@ -23,6 +23,16 @@
 {
 	[super viewDidLoad];
 	
+	//ask someone in graphics to make a mapmytimehop or mapmyhistory logo
+	UIImage *logo = [UIImage imageNamed:@"header_logo"];
+	logo.isAccessibilityElement = YES;
+	logo.accessibilityLabel = @"MapMyTimeHop";
+	UIImageView *imView = [[UIImageView alloc] initWithImage:logo];
+	imView.isAccessibilityElement = YES;
+	imView.accessibilityLabel = @"Header Image";
+	self.navigationItem.titleView = imView;
+	imView.frame = CGRectMake(imView.frame.origin.x, imView.frame.origin.y, imView.frame.size.width, imView.frame.size.height);
+	
 	self.navigationController.hidesBarsOnTap = YES;
 	
 	// Clear any cookies before showing the webview since

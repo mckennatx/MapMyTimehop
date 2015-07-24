@@ -10,8 +10,11 @@
 #import "AppDelegate.h"
 #import "UALoginViewController.h"
 #import "TableHeaderView.h"
-#import "AFNetworking/UIKit+AFNetworking/UIImageView+AFNetworking.h"
-#import "WorkoutToDisplay.h"
+#import "LoadingView.h"
+#import "SettingsViewController.h"
+#import "Conversions.h"
+
+static const NSInteger maxLoad = 4;
 
 @interface MMTimeHopViewController ()
 - (IBAction)logout:(id)sender;
@@ -30,25 +33,91 @@
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+
+	//ask someone in graphics to make a mapmytimehop or mapmyhistory logo
+	UIImage *logo = [UIImage imageNamed:@"header_logo"];
+	logo.isAccessibilityElement = YES;
+	logo.accessibilityLabel = @"MapMyTimeHop";
+	UIImageView *imView = [[UIImageView alloc] initWithImage:logo];
+	imView.isAccessibilityElement = YES;
+	imView.accessibilityLabel = @"Header Image";
+	self.navigationItem.titleView = imView;
+	imView.frame = CGRectMake(imView.frame.origin.x, imView.frame.origin.y, imView.frame.size.width, imView.frame.size.height);
+
+	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsView)];
+	
 	self.tableHeaders = [self buildTableHeaders];
-	self.tableData = [self buildTableData];
+	self.tableView.sectionHeaderHeight = [TableHeaderView defaultHeight];
+	self.tableView.rowHeight = 70;
+	self.tableView.separatorColor = [UIColor clearColor];
+	self.tableView.backgroundColor = [UIColor clearColor];
+	self.view.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
 
-	// Add a login block that will be called whenever
-	// the API failes and requires authentication.
-	[[UA sharedInstance] setUserAuthBlock:^(void) {
-		[self showLogin:YES];
-	}];
+	
+	if(!self.allWorkoutsLoaded)
+		[LoadingView showModalLoadingViewWithText:@"loading workouts..."];
+	
+	NSDate *date = [self previousDate:kOneMonth];
+	
+	self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	date = [self previousDate:kOneYear];
+	self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	date = [self previousDate:kTwoYear];
+	self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	date = [self previousDate:kThreeYear];
+	self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTable) name:@"reloadTable" object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggedOut) name:@"loggedOut" object:nil];
 
+}
+
+- (void)loggedOut {
+	NSLog(@"logged out");
+	self.oneMonth = nil;
+	self.oneYear = nil;
+	self.twoYear = nil;
+	self.threeYear = nil;
+	self.numLoaded = 0;
+	self.allWorkoutsLoaded = NO;
+	[self.tableView reloadData];
+}
+
+- (void)settingsView {
+
+	SettingsViewController *svc = [[SettingsViewController alloc] init];
+	svc.modalPresentationStyle = UIModalTransitionStyleCoverVertical;
+	[self presentViewController:svc animated:YES completion:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
-	NSDate *date = [self previousDate:kOneMonth];
-	WorkoutToDisplay *oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-	date = [self previousDate:kOneYear];
-	WorkoutToDisplay *oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-	date = [self previousDate:kTwoYear];
-	WorkoutToDisplay *twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	
+	if(!self.allWorkoutsLoaded) {
+		NSDate *date = [self previousDate:kOneMonth];
+	
+		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kOneYear];
+		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kTwoYear];
+		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kThreeYear];
+		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	}
+	//refresh table
+	[self.tableView reloadData];
+}
+
+- (void)updateTable {
+	++self.numLoaded;
+	if(self.numLoaded == maxLoad) {
+		NSLog(@"good good");
+		self.allWorkoutsLoaded = YES;
+		[LoadingView dismissModalLoadingView];
+	}
+	
+	[self.tableView reloadData];
 }
 
 //This method should be called when setting up future notifications
@@ -110,13 +179,6 @@
 	return date;
 }
 
-- (NSString *)avatarUrlForUserID:(NSString *)userID
-{
-	// append date to url to avoid cloudfront 302 redirect cache so that new avatar will be loaded when avatar is updated via edit profile
-	//NSDate *date = [SettingsModel sharedInstance].avatarUpdatedDate;
-	return [NSString stringWithFormat:@"https://drzetlglcbfx.cloudfront.net/profile/%@/picture?size=Medium", userID];
-}
-
 - (void)viewWillAppear:(BOOL)animated
 {
 	[super viewWillAppear:animated];
@@ -129,48 +191,14 @@
 
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
+	NSLog(@"memory warning received");
 	// Dispose of any resources that can be recreated.
-}
-
-- (void)showLogin:(BOOL)animated
-{
-	if (self.presentedViewController == nil) {
-		UALoginViewController *vc = [[UALoginViewController alloc] init];
-		
-		UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
-		
-		[self presentViewController:navigationController animated:animated completion:nil];
-	}
-}
-
-- (void)refreshLoginState
-{
-	if ([[UA sharedInstance] isAuthenticated] == NO) {
-		[self showLogin:YES];
-	}
-	else {
-		[self dismissViewControllerAnimated:YES completion:NULL];
-	}
-}
-
-- (void)logout:(id)sender
-{
-	[[UA sharedInstance] logout:^(NSError *error) {
-		[self showLogin:YES];
-	}];
 }
 
 #pragma mark - Table view data source
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-	return [TableHeaderView defaultHeight];
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-	TableHeaderView *view = [TableHeaderView headerWithTitle:@"One Month Ago"];
-	return view;
+- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+	return [self.tableHeaders objectAtIndex:section];
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -180,12 +208,34 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-	return [self.tableData count];
+	NSInteger count=1;
+	switch (section)
+	{
+		case 0:
+			if(self.oneMonth.hasPastWorkoutFromTodaysDate)
+				count = [self.oneMonth.pastWorkoutsFromDate count];
+			break;
+		case 1:
+			if(self.oneYear.hasPastWorkoutFromTodaysDate)
+				count = [self.oneYear.pastWorkoutsFromDate count];
+			break;
+		case 2:
+			if(self.twoYear.hasPastWorkoutFromTodaysDate)
+				count = [self.twoYear.pastWorkoutsFromDate count];
+			break;
+		case 3:
+			if(self.threeYear.hasPastWorkoutFromTodaysDate)
+				count = [self.threeYear.pastWorkoutsFromDate count];
+			break;
+		default:
+			break;
+	}
+	
+	return count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-	
 	static NSString *CellIdentifier = @"Cell";
 	
 	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
@@ -193,10 +243,31 @@
 		cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.rowHeight)];
 	}
 	
-	//NSDictionary *data = self.tableData[indexPath.section][indexPath.row];
-	
-	cell.textLabel.text = @"test";
-	
+	if(self.allWorkoutsLoaded) {
+		switch(indexPath.section) {
+			case 0:
+				if(self.oneMonth.hasPastWorkoutFromTodaysDate) {
+					cell.textLabel.text = [self.oneMonth.pastWorkoutsFromDate[indexPath.row] workoutName];
+					UAWorkoutAggregate *agg = (UAWorkoutAggregate *)[self.oneMonth.pastWorkoutsFromDate[indexPath.row] aggregate];
+					NSLog(@"distance: %@", [agg distanceTotal]);
+				}
+				break;
+			case 1:
+				if(self.oneYear.hasPastWorkoutFromTodaysDate)
+					cell.textLabel.text = [self.oneYear.pastWorkoutsFromDate[indexPath.row] workoutName];
+				break;
+			case 2:
+				if(self.twoYear.hasPastWorkoutFromTodaysDate)
+					cell.textLabel.text = [self.twoYear.pastWorkoutsFromDate[indexPath.row] workoutName];
+				break;
+			case 3:
+				if(self.threeYear.hasPastWorkoutFromTodaysDate)
+					cell.textLabel.text = [self.threeYear.pastWorkoutsFromDate[indexPath.row] workoutName];
+				break;
+			default:
+				break;
+		}
+	}
 	return cell;
 }
 
@@ -211,27 +282,4 @@
 			  @"3 years ago",
 			  ] mutableCopy];
 }
-
-- (NSMutableArray *)buildTableData
-{
-	return [@[
-			  @"test1",
-			  @"test2",
-			  @"test3",
-			  @"test4",
-			  ] mutableCopy];
-}
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
-
-//- (IBAction)logout:(id)sender {
-//}
 @end

@@ -28,6 +28,8 @@
 		[self workoutsToDisplayWithBlock:^{
 			self.loadedWorkouts = YES;
 			[self parseWorkouts];
+			
+			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
 		}];
 	}
 	return self;
@@ -74,5 +76,6 @@
 	
 	NSLog(@"past workouts: %ld", [_pastWorkoutsFromDate count]);
 }
+
 
 @end

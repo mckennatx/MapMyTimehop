@@ -2,7 +2,6 @@
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="7706" systemVersion="14E46" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="7703"/>
-        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="MMTimeHopViewController">
@@ -16,18 +15,9 @@
             <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
             <autoresizingMask key="autoresizingMask"/>
             <subviews>
-                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Cq2-jW-IPs">
-                    <rect key="frame" x="548" y="8" width="44" height="30"/>
-                    <state key="normal" title="logout">
-                        <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                    </state>
-                    <connections>
-                        <action selector="logout:" destination="-1" eventType="touchUpInside" id="6SX-Ya-KcO"/>
-                    </connections>
-                </button>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="gFn-0Z-uhG">
-                    <rect key="frame" x="4" y="46" width="592" height="546"/>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" allowsSelection="NO" rowHeight="44" sectionHeaderHeight="10" sectionFooterHeight="10" translatesAutoresizingMaskIntoConstraints="NO" id="gFn-0Z-uhG">
+                    <rect key="frame" x="8" y="8" width="584" height="584"/>
+                    <color key="backgroundColor" cocoaTouchSystemColor="groupTableViewBackgroundColor"/>
                     <connections>
                         <outlet property="dataSource" destination="-1" id="5m7-Ba-6mu"/>
                         <outlet property="delegate" destination="-1" id="gef-PN-5Iv"/>
@@ -36,12 +26,10 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstItem="gFn-0Z-uhG" firstAttribute="top" secondItem="Cq2-jW-IPs" secondAttribute="bottom" constant="8" symbolic="YES" id="9gI-oi-sUa"/>
-                <constraint firstItem="gFn-0Z-uhG" firstAttribute="bottom" secondItem="CfE-W5-UWh" secondAttribute="bottomMargin" id="9oJ-fg-ljw"/>
-                <constraint firstItem="gFn-0Z-uhG" firstAttribute="leading" secondItem="CfE-W5-UWh" secondAttribute="leading" constant="4" id="Ec6-1F-TAG"/>
-                <constraint firstItem="gFn-0Z-uhG" firstAttribute="centerX" secondItem="CfE-W5-UWh" secondAttribute="centerX" id="TPw-l8-NA8"/>
-                <constraint firstItem="Cq2-jW-IPs" firstAttribute="top" secondItem="CfE-W5-UWh" secondAttribute="topMargin" id="wn8-5m-rqS"/>
-                <constraint firstItem="Cq2-jW-IPs" firstAttribute="trailing" secondItem="CfE-W5-UWh" secondAttribute="trailingMargin" id="xa5-5i-zry"/>
+                <constraint firstItem="gFn-0Z-uhG" firstAttribute="leading" secondItem="CfE-W5-UWh" secondAttribute="leading" constant="8" id="3pD-jp-fQb"/>
+                <constraint firstItem="gFn-0Z-uhG" firstAttribute="top" secondItem="CfE-W5-UWh" secondAttribute="top" constant="8" id="AW2-wN-5dx"/>
+                <constraint firstAttribute="trailing" secondItem="gFn-0Z-uhG" secondAttribute="trailing" constant="8" id="Z5B-ou-4gk"/>
+                <constraint firstAttribute="bottom" secondItem="gFn-0Z-uhG" secondAttribute="bottom" constant="8" id="cuv-8T-RBq"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
             <point key="canvasLocation" x="222" y="349"/>

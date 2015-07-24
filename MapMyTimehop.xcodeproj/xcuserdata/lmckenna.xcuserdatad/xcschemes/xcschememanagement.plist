@@ -4,7 +4,7 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>MapMyTimehop.xcscheme</key>
+		<key>MapMyTimeHop.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
@@ -12,12 +12,12 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>9E9453711B5D779C00BC8A53</key>
+		<key>9EA3E5A81B62B13200C56D71</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>9E94538A1B5D779D00BC8A53</key>
+		<key>9EA3E5C11B62B13200C56D71</key>
 		<dict>
 			<key>primary</key>
 			<true/>

@@ -14,10 +14,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9E9453711B5D779C00BC8A53"
-               BuildableName = "MapMyTimehop.app"
-               BlueprintName = "MapMyTimehop"
-               ReferencedContainer = "container:MapMyTimehop.xcodeproj">
+               BlueprintIdentifier = "9EA3E5A81B62B13200C56D71"
+               BuildableName = "MapMyTimeHop.app"
+               BlueprintName = "MapMyTimeHop"
+               ReferencedContainer = "container:MapMyTimeHop.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -28,10 +28,10 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9E94538A1B5D779D00BC8A53"
-               BuildableName = "MapMyTimehopTests.xctest"
-               BlueprintName = "MapMyTimehopTests"
-               ReferencedContainer = "container:MapMyTimehop.xcodeproj">
+               BlueprintIdentifier = "9EA3E5C11B62B13200C56D71"
+               BuildableName = "MapMyTimeHopTests.xctest"
+               BlueprintName = "MapMyTimeHopTests"
+               ReferencedContainer = "container:MapMyTimeHop.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -46,20 +46,20 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "9E94538A1B5D779D00BC8A53"
-               BuildableName = "MapMyTimehopTests.xctest"
-               BlueprintName = "MapMyTimehopTests"
-               ReferencedContainer = "container:MapMyTimehop.xcodeproj">
+               BlueprintIdentifier = "9EA3E5C11B62B13200C56D71"
+               BuildableName = "MapMyTimeHopTests.xctest"
+               BlueprintName = "MapMyTimeHopTests"
+               ReferencedContainer = "container:MapMyTimeHop.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9E9453711B5D779C00BC8A53"
-            BuildableName = "MapMyTimehop.app"
-            BlueprintName = "MapMyTimehop"
-            ReferencedContainer = "container:MapMyTimehop.xcodeproj">
+            BlueprintIdentifier = "9EA3E5A81B62B13200C56D71"
+            BuildableName = "MapMyTimeHop.app"
+            BlueprintName = "MapMyTimeHop"
+            ReferencedContainer = "container:MapMyTimeHop.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
@@ -76,10 +76,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9E9453711B5D779C00BC8A53"
-            BuildableName = "MapMyTimehop.app"
-            BlueprintName = "MapMyTimehop"
-            ReferencedContainer = "container:MapMyTimehop.xcodeproj">
+            BlueprintIdentifier = "9EA3E5A81B62B13200C56D71"
+            BuildableName = "MapMyTimeHop.app"
+            BlueprintName = "MapMyTimeHop"
+            ReferencedContainer = "container:MapMyTimeHop.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -95,10 +95,10 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "9E9453711B5D779C00BC8A53"
-            BuildableName = "MapMyTimehop.app"
-            BlueprintName = "MapMyTimehop"
-            ReferencedContainer = "container:MapMyTimehop.xcodeproj">
+            BlueprintIdentifier = "9EA3E5A81B62B13200C56D71"
+            BuildableName = "MapMyTimeHop.app"
+            BlueprintName = "MapMyTimeHop"
+            ReferencedContainer = "container:MapMyTimeHop.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

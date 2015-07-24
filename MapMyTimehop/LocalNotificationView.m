@@ -9,7 +9,7 @@
 #import "LocalNotificationView.h"
 #import "LocalNotificationController.h"
 
-const CGFloat kNotificationHeight = 64;
+const CGFloat notificationHeight = 64;
 
 @interface LocalNotificationView()
 
@@ -34,14 +34,14 @@ const CGFloat kNotificationHeight = 64;
  */
 
 - (id)initWithString:(NotificationModel *)notification target:(id)target swipeSelector:(SEL)swipe actionSelector:(SEL)action {
-	self = [super initWithFrame:CGRectMake(0, kNotificationHeight, 320, kNotificationHeight)];
+	self = [super initWithFrame:CGRectMake(0, notificationHeight, 320, notificationHeight)];
 	if (self != nil) {
 		
 		/* Setting up notificationLabel and imageView and notificationAction
 		 */
 		self.isVisible = NO;
 		self.alpha = 0.0f;
-		self.notificationLabel = [[UILabel alloc] initWithFrame:CGRectMake(kNotificationHeight/2 + 20, 5, 300, kNotificationHeight-2)];
+		self.notificationLabel = [[UILabel alloc] initWithFrame:CGRectMake(notificationHeight/2 + 20, 5, 300, notificationHeight-2)];
 		self.notificationLabel.textColor = [UIColor whiteColor];
 		self.notificationLabel.backgroundColor = [UIColor clearColor];
 		self.notificationLabel.adjustsFontSizeToFitWidth = YES;
@@ -52,7 +52,7 @@ const CGFloat kNotificationHeight = 64;
 		self.notificationLabel.numberOfLines = 2;
 		self.notificationLabel.lineBreakMode = NSLineBreakByTruncatingTail;
 		
-		self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, [UIApplication sharedApplication].statusBarFrame.size.height-1, kNotificationHeight/2, kNotificationHeight/2)];
+		self.imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, [UIApplication sharedApplication].statusBarFrame.size.height-1, notificationHeight/2, notificationHeight/2)];
 		self.imageView.contentMode = UIViewContentModeScaleAspectFit;
 		
 		[self addSubview:self.imageView];
@@ -65,7 +65,7 @@ const CGFloat kNotificationHeight = 64;
 		[self addSubview:self.notificationLabel];
 		
 		if(!self.notificationAction) {
-			self.notificationAction = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, kNotificationHeight)];
+			self.notificationAction = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 320, notificationHeight)];
 			self.notificationAction.backgroundColor = [UIColor clearColor];
 		}
 		

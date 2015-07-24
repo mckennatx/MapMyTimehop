@@ -9,6 +9,8 @@
 #import "AppDelegate.h"
 #import "MMTimeHopViewController.h"
 #import "UASDKConfig.h"
+#import "UALoginViewController.h"
+#import "Conversions.h"
 
 @import UASDK;
 
@@ -27,20 +29,29 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
-
+	
 	[UA initializeWithApplicationConsumer:[UASDKConfig apiKey]
 						applicationSecret:[UASDKConfig apiSecret]];
 	
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
 	
-	self.timeHopViewController = [[MMTimeHopViewController alloc] init];
-	self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.timeHopViewController];
-	self.window.rootViewController = self.navigationController;
+	if([[UA sharedInstance] authenticatedUserRef] == nil) {
+		UALoginViewController *vc = [[UALoginViewController alloc] init];
+		self.navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+		self.window.rootViewController = self.navigationController;
+	}
+	
+	else {
+		self.timeHopViewController = [[MMTimeHopViewController alloc] init];
+		self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.timeHopViewController];
+		self.window.rootViewController = self.navigationController;
+	}
 	
 	[self setAppearance];
 	
 	[self.window makeKeyAndVisible];
-
+	
+	
 	return YES;
 }
 
@@ -49,8 +60,7 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 	self.window.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 	
-	//UIColor *barTint = RGBACOLOR(0, 108, 191, 1);
-	UIColor *barTint = [UIColor whiteColor];
+	UIColor *barTint = [UIColor colorWithRed:0.90 green:0.45 blue:0.00 alpha:1.0];
 	
 	[[UINavigationBar appearance] setBarTintColor:barTint];
 	[[UIToolbar appearance] setBarStyle:UIBarStyleBlackTranslucent];
@@ -82,6 +92,7 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 - (void)applicationWillEnterForeground:(UIApplication *)application {
 	// Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
+
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 	// Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
