@@ -59,4 +59,34 @@
 {
 	return joules * 0.000239005736;
 }
+
++ (UIFont *)regularFontWithSize:(CGFloat)size {
+	UIFont *regular = [UIFont fontWithName:kDefaultFontRegular size:size];
+	if(!regular)
+		regular = [UIFont systemFontOfSize:size];
+	return regular;
+}
+
++ (UIFont *)semiboldFontWithSize:(CGFloat)size {
+	UIFont *semiBold = [UIFont fontWithName:kDefaultFontSemibold size:size];
+	if(!semiBold)
+		semiBold = [UIFont systemFontOfSize:size];
+	return semiBold;
+}
+
++ (UIFont *)boldFontWithSize:(CGFloat)size {
+	UIFont *bold = [UIFont fontWithName:kDefaultFontBold size:size];
+	if(!bold)
+		bold = [UIFont systemFontOfSize:size];
+	return bold;
+}
+
++ (UIFont *)lightFontWithSize:(CGFloat)size
+{
+	UIFont *light = [UIFont fontWithName:kDefaultFontLight size:size];
+	if(!light)
+		light = [UIFont systemFontOfSize:size];
+	return light;
+}
+
 @end

@@ -115,10 +115,48 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)logout:(id)sender {
-	[[UA sharedInstance] logout:^(NSError *error) {
-		[[NSNotificationCenter defaultCenter] postNotificationName:@"loggedOut" object:nil];
-		[self showLogin:YES];
-	}];
+	UIAlertAction *logOutAction;
+	UIAlertAction *otherAction;
+	UIAlertController *alertController= [UIAlertController alertControllerWithTitle:@"Are you sure you want to log out?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
+
+	logOutAction = [UIAlertAction actionWithTitle:@"Log Out"
+											 style:UIAlertActionStyleDefault
+										   handler:^(UIAlertAction *action) {
+											   [[UA sharedInstance] logout:^(NSError *error) {
+												   [[NSNotificationCenter defaultCenter] postNotificationName:@"loggedOut" object:nil];
+												   [self showLogin:YES];
+											   }];
+										   }];
+	otherAction = [UIAlertAction actionWithTitle:@"Cancel"
+										   style:UIAlertActionStyleDefault
+										 handler:^(UIAlertAction *action) {
+											 // do something here
+										 }];
+	[alertController addAction:logOutAction];
+	[alertController addAction:otherAction];
+	
+	alertController.popoverPresentationController.sourceView = self.view;
+	[self presentViewController:alertController animated:YES
+					 completion:nil];
+}
+
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+	switch(buttonIndex) {
+		case 0: //"No" pressed
+			//do something?
+			break;
+		case 1: //"Yes" pressed
+			//here you pop the viewController
+			
+			[[UA sharedInstance] logout:^(NSError *error) {
+				[[NSNotificationCenter defaultCenter] postNotificationName:@"loggedOut" object:nil];
+				[self showLogin:YES];
+			}];
+
+			break;
+	}
 }
 
 - (void)showLogin:(BOOL)animated
@@ -131,6 +169,16 @@
 		[self presentViewController:navigationController animated:animated completion:nil];
 	}
 }
+- (void)refreshLoginState
+{
+	if ([[UA sharedInstance] isAuthenticated] == NO) {
+		[self showLogin:YES];
+	}
+	else {
+		[self dismissViewControllerAnimated:YES completion:NULL];
+	}
+}
+
 - (void)dismissView {
 	[self dismissViewControllerAnimated:YES completion:nil];
 }

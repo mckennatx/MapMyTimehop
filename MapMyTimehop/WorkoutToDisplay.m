@@ -14,6 +14,7 @@
 @property (nonatomic, copy) UAWorkoutListRef *workoutListRef;
 @property (nonatomic, copy)	NSArray *pastWorkoutsList;
 @property (nonatomic, assign) BOOL loadedWorkouts;
+@property (nonatomic, copy) UAActivityTypeReference *ref;
 
 @end
 
@@ -25,11 +26,12 @@
 		_filterDate = filter;
 		_hasPastWorkoutFromTodaysDate = NO;
 		_pastWorkoutsFromDate = [[NSMutableArray alloc] init];
+		_pastActivities = [[NSMutableArray alloc] init];
 		[self workoutsToDisplayWithBlock:^{
 			self.loadedWorkouts = YES;
 			[self parseWorkouts];
-			
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+
 		}];
 	}
 	return self;
@@ -44,6 +46,7 @@
 	UAWorkoutManager *workoutManager = [[UA sharedInstance] workoutManager];
 
 	[workoutManager fetchWorkoutsWithListRef:_workoutListRef
+									withCachePolicy:UACacheElseNetwork
 									response:^(UAWorkoutList *object, NSError *error) {
 										if (!error) {
 											_pastWorkoutsList = object.objects;
@@ -73,8 +76,6 @@
 			_hasPastWorkoutFromTodaysDate = YES;
 		}
 	}
-	
-	NSLog(@"past workouts: %ld", [_pastWorkoutsFromDate count]);
 }
 
 

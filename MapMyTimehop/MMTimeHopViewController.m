@@ -13,19 +13,24 @@
 #import "LoadingView.h"
 #import "SettingsViewController.h"
 #import "Conversions.h"
+#import "WorkoutCell.h"
 
 static const NSInteger maxLoad = 4;
 
 @interface MMTimeHopViewController ()
-- (IBAction)logout:(id)sender;
-@property (weak, nonatomic) IBOutlet UIImageView *profileIcon;
-@property (nonatomic, strong) UAWorkoutListRef *nextReference;
+
+@property (nonatomic, copy) NSArray *tableHeaders;
+@property (nonatomic, copy) NSArray *sectionColors;
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (nonatomic, strong) NSMutableArray *listArray;
+@property (nonatomic, assign) NSInteger numLoaded;
+@property (nonatomic, copy) UAWorkoutListRef *workoutListRef;
 @property (nonatomic, assign) BOOL pullToRefresh;
 @property (nonatomic, assign) BOOL allWorkoutsLoaded;
-@property (nonatomic, assign) BOOL reloadingFailed;
-@property (nonatomic, assign) BOOL saving;
-@property (nonatomic, strong) NSFetchedResultsController *fetchedResultsController;
-@property (nonatomic, strong) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, strong) WorkoutToDisplay *oneMonth;
+@property (nonatomic, strong) WorkoutToDisplay *oneYear;
+@property (nonatomic, strong) WorkoutToDisplay *twoYear;
+@property (nonatomic, strong) WorkoutToDisplay *threeYear;
 
 @end
 
@@ -45,27 +50,18 @@ static const NSInteger maxLoad = 4;
 	imView.frame = CGRectMake(imView.frame.origin.x, imView.frame.origin.y, imView.frame.size.width, imView.frame.size.height);
 
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsView)];
-	
+
+	self.tableView.rowHeight = [WorkoutCell cellHeight];
 	self.tableHeaders = [self buildTableHeaders];
+	self.sectionColors = [self buildSectionColors];
 	self.tableView.sectionHeaderHeight = [TableHeaderView defaultHeight];
-	self.tableView.rowHeight = 70;
 	self.tableView.separatorColor = [UIColor clearColor];
 	self.tableView.backgroundColor = [UIColor clearColor];
 	self.view.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
-
 	
 	if(!self.allWorkoutsLoaded)
 		[LoadingView showModalLoadingViewWithText:@"loading workouts..."];
 	
-	NSDate *date = [self previousDate:kOneMonth];
-	
-	self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-	date = [self previousDate:kOneYear];
-	self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-	date = [self previousDate:kTwoYear];
-	self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-	date = [self previousDate:kThreeYear];
-	self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTable) name:@"reloadTable" object:nil];
 	
@@ -112,7 +108,6 @@ static const NSInteger maxLoad = 4;
 - (void)updateTable {
 	++self.numLoaded;
 	if(self.numLoaded == maxLoad) {
-		NSLog(@"good good");
 		self.allWorkoutsLoaded = YES;
 		[LoadingView dismissModalLoadingView];
 	}
@@ -183,10 +178,6 @@ static const NSInteger maxLoad = 4;
 {
 	[super viewWillAppear:animated];
 	
-	// Present the login view if there is no currently authed
-	// user
-	if ([[UA sharedInstance] isAuthenticated] == NO)
-		[self showLogin:animated];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -197,9 +188,32 @@ static const NSInteger maxLoad = 4;
 
 #pragma mark - Table view data source
 
-- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-	return [self.tableHeaders objectAtIndex:section];
+//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
+//	return [self.tableHeaders objectAtIndex:section];
+//}
+
+-(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
+	UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 18)];
+	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width/2, 24)];
+	label.layer.cornerRadius = 5;
+	label.clipsToBounds = YES;
+	[label setFont:[UIFont fontWithName:@"OpenSans-Bold" size:12.5]];
+	[label setTextColor:[UIColor whiteColor]];
+	[label setTextAlignment:NSTextAlignmentCenter];
+	[label setText:[[self.tableHeaders objectAtIndex:section] uppercaseString]];
+	[label setBackgroundColor:[self.sectionColors objectAtIndex:section]];
+
+	
+	[view addSubview:label];
+	
+	return view;
 }
+
+-(CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:
+(NSInteger)section{
+	return 44.0f;
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -236,33 +250,49 @@ static const NSInteger maxLoad = 4;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
+//	static NSString *CellIdentifier = @"Cell";
+//	
+//	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+//	if(!cell) {
+//		cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.rowHeight)];
+//	}
 	static NSString *CellIdentifier = @"Cell";
 	
-	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-	if(!cell) {
-		cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.rowHeight)];
+	
+	WorkoutCell *cell = [self.tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+	if(cell == nil) {
+		NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"WorkoutCell" owner:self options:nil];
+		cell = topLevelObjects[0];
 	}
 	
 	if(self.allWorkoutsLoaded) {
 		switch(indexPath.section) {
 			case 0:
-				if(self.oneMonth.hasPastWorkoutFromTodaysDate) {
-					cell.textLabel.text = [self.oneMonth.pastWorkoutsFromDate[indexPath.row] workoutName];
-					UAWorkoutAggregate *agg = (UAWorkoutAggregate *)[self.oneMonth.pastWorkoutsFromDate[indexPath.row] aggregate];
-					NSLog(@"distance: %@", [agg distanceTotal]);
-				}
+				if(self.oneMonth.hasPastWorkoutFromTodaysDate)
+					[cell setWorkout:self.oneMonth.pastWorkoutsFromDate[indexPath.row]];
+				else
+					[cell setNoWorkout];
+				
 				break;
 			case 1:
 				if(self.oneYear.hasPastWorkoutFromTodaysDate)
-					cell.textLabel.text = [self.oneYear.pastWorkoutsFromDate[indexPath.row] workoutName];
+					[cell setWorkout:self.oneYear.pastWorkoutsFromDate[indexPath.row]];
+				else
+					[cell setNoWorkout];
+				
 				break;
 			case 2:
 				if(self.twoYear.hasPastWorkoutFromTodaysDate)
-					cell.textLabel.text = [self.twoYear.pastWorkoutsFromDate[indexPath.row] workoutName];
+					[cell setWorkout:self.twoYear.pastWorkoutsFromDate[indexPath.row]];
+				else
+					[cell setNoWorkout];
+				
 				break;
 			case 3:
 				if(self.threeYear.hasPastWorkoutFromTodaysDate)
-					cell.textLabel.text = [self.threeYear.pastWorkoutsFromDate[indexPath.row] workoutName];
+					[cell setWorkout:self.threeYear.pastWorkoutsFromDate[indexPath.row]];
+				else
+					[cell setNoWorkout];
 				break;
 			default:
 				break;
@@ -282,4 +312,40 @@ static const NSInteger maxLoad = 4;
 			  @"3 years ago",
 			  ] mutableCopy];
 }
+
+- (NSMutableArray *)buildSectionColors
+{
+	UIColor *color1, *color2, *color3, *color4;
+	color1 = [UIColor colorWithRed:0.67 green:0.71 blue:0.89 alpha:1.0];
+	color2 = [UIColor colorWithRed:0.88 green:0.55 blue:0.62 alpha:1.0];
+	color3 = [UIColor colorWithRed:0.47 green:0.72 blue:0.58 alpha:1.0];
+	color4 = [UIColor colorWithRed:0.25 green:0.46 blue:0.58 alpha:1.0];
+	return [@[
+			  color1,
+			  color2,
+			  color3,
+			  color4] mutableCopy];
+}
+
+#pragma mark - Login Methods
+- (void)showLogin:(BOOL)animated
+{
+	if (self.presentedViewController == nil) {
+		UALoginViewController *vc = [[UALoginViewController alloc] init];
+		
+		UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
+		
+		[self presentViewController:navigationController animated:animated completion:nil];
+	}
+}
+- (void)refreshLoginState
+{
+	if ([[UA sharedInstance] isAuthenticated] == NO) {
+		[self showLogin:YES];
+	}
+	else {
+		[self dismissViewControllerAnimated:YES completion:NULL];
+	}
+}
+
 @end

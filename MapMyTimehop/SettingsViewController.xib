@@ -36,7 +36,7 @@
                                 <constraint firstAttribute="height" constant="61" id="e9E-7G-NwH"/>
                             </constraints>
                             <state key="normal" title="Logout">
-                                <color key="titleColor" cocoaTouchSystemColor="tableCellGroupedBackgroundColor"/>
+                                <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <connections>
@@ -118,7 +118,7 @@
                                     <rect key="frame" x="0.0" y="77" width="321" height="25"/>
                                     <subviews>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="TOTAL KILOMETERS" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="97" userLabel="Miles Key Label">
-                                            <rect key="frame" x="8" y="5" width="100" height="15"/>
+                                            <rect key="frame" x="8" y="5" width="100" height="14.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="100" id="JJK-V8-Cc3"/>
                                             </constraints>
@@ -127,21 +127,21 @@
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="--" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="98" userLabel="Miles Value Label">
-                                            <rect key="frame" x="114" y="5" width="38" height="15"/>
+                                            <rect key="frame" x="114" y="5" width="38" height="14.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="38" id="Qyt-8r-QZS"/>
                                             </constraints>
                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                             <nil key="highlightedColor"/>
                                         </label>
-                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" misplaced="YES" text="TOTAL CALORIES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="102" userLabel="Calories Key Label">
-                                            <rect key="frame" x="171" y="5" width="100" height="15"/>
+                                        <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="249" text="TOTAL CALORIES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="102" userLabel="Calories Key Label">
+                                            <rect key="frame" x="186" y="5" width="85" height="14.5"/>
                                             <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                             <color key="textColor" white="0.42999999999999999" alpha="1" colorSpace="calibratedWhite"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" text="--" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="101" userLabel="Calories Value Label">
-                                            <rect key="frame" x="264" y="5" width="51" height="15"/>
+                                            <rect key="frame" x="264" y="5" width="51" height="14.5"/>
                                             <constraints>
                                                 <constraint firstAttribute="width" constant="51" id="TQJ-EI-Hha"/>
                                             </constraints>
