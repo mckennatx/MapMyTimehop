@@ -7,7 +7,7 @@
 //
 
 #import "WorkoutToDisplay.h"
-
+#import "Conversions.h"
 
 @interface WorkoutToDisplay ()
 
@@ -37,12 +37,21 @@
 	return self;
 }
 
+- (instancetype)refresh {
+	[self workoutsToDisplayWithBlock:^{
+		self.loadedWorkouts = YES;
+		[self.pastWorkoutsFromDate removeAllObjects];
+		[self parseWorkouts];
+		NSLog(@"%@", self.pastWorkoutsFromDate);
+		[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
+	}];
+	return self;
+}
 /* Method pulls the last 20 workouts done: 1 month ago, 1 year ago, 2 years ago
  * Store the list in an array associated with
  */
 - (void)workoutsToDisplayWithBlock:(void (^)())complete {
-	NSDate *date = _filterDate;
-	_workoutListRef = [UAWorkoutListRef workoutListRefWithUserReference:[[UA sharedInstance] authenticatedUserRef] createdBefore:date];
+	_workoutListRef = [UAWorkoutListRef workoutListRefWithUserReference:[[UA sharedInstance] authenticatedUserRef] createdBefore:_filterDate];
 	UAWorkoutManager *workoutManager = [[UA sharedInstance] workoutManager];
 
 	[workoutManager fetchWorkoutsWithListRef:_workoutListRef
@@ -77,6 +86,16 @@
 		}
 	}
 }
+
+- (CGFloat)totalCalories {
+	CGFloat totalCal;
+	for(UAWorkout *workout in _pastWorkoutsFromDate) {
+		totalCal += [Conversions convertJoulesToCalories:[workout.aggregate.metabolicEnergyTotal doubleValue]];
+	}
+	return totalCal;
+}
+
+
 
 
 @end

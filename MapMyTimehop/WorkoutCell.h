@@ -28,6 +28,7 @@ typedef enum {
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
 - (void)setWorkout:(UAWorkout *)workout;
 - (void)setNoWorkout;
+
 + (CGFloat)cellHeight;
 
 @end

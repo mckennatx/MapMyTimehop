@@ -16,6 +16,10 @@ static NSString* const kRunPath = @"run.png";
 static NSString* const kDogPath = @"dogwalk.png";
 static NSString* const kHikePath = @"hike.png";
 
+@interface WorkoutCell ()
+@property (nonatomic, retain) UAWorkout *exercise;
+@end
+
 @implementation WorkoutCell
 
 - (void)awakeFromNib {
@@ -39,17 +43,15 @@ static NSString* const kHikePath = @"hike.png";
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 
-    // Configure the view for the selected state
 }
 
 - (void)setWorkout:(UAWorkout *)workout {
 	//self.background.backgroundColor = HEXCOLOR(0x002D72FF);
-	UAWorkoutAggregate *agg = (UAWorkoutAggregate *)[workout aggregate];
+	self.exercise = workout;
 	self.ref = [workout activityTypeRef];
 	[self activitiesToDisplayWithBlock: ^ {
 	}];
 	self.workoutName.text = [workout workoutName];
-	self.distanceVal.text = [[agg distanceTotal] stringValue];
 	[self.workoutName setHidden:NO];
 	[self.distanceVal setHidden:NO];
 	[self.distanceLabel setHidden:NO];
@@ -59,7 +61,6 @@ static NSString* const kHikePath = @"hike.png";
 
 - (void)setNoWorkout {
 	UIImageView *noWorkoutImg = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 20, 20)];
-
 	self.workoutName.text = @"NO WORKOUTS WERE FOUND";
 	[self.workoutName setFont:[Conversions lightFontWithSize:14]];
 	self.workoutName.textColor = [UIColor colorWithRed:0.63 green:0.64 blue:0.60 alpha:1.0];
@@ -78,7 +79,18 @@ static NSString* const kHikePath = @"hike.png";
 																	   icon index = [self parseImageURL:[type iconURL]];
 																	   [self.background setImage:[self.iconImages objectAtIndex:index]];
 																	   self.background.contentMode = UIViewContentModeScaleAspectFit;
-
+																	   
+																	   if(index == kOther) {
+																		   UAWorkoutAggregate *agg = (UAWorkoutAggregate *)[self.exercise aggregate];
+																		   self.distanceLabel.text = @"Total Duration: ";
+																		   NSInteger seconds = [[agg activeTimeTotal] integerValue];
+																		   self.distanceVal.text = [Conversions secondsToHMS:seconds];
+																	   } else {
+																		   self.distanceLabel.text = @"Total Distance: ";
+																		   UAWorkoutAggregate *agg = (UAWorkoutAggregate *)[self.exercise aggregate];
+																		   NSNumber *distance = @([Conversions distanceInUserUnits:[[agg distanceTotal] doubleValue] measurement:UADisplayMeasurementImperial]);
+																		   self.distanceVal.text = [NSString stringWithFormat:@"%@ miles", [Conversions rollupStringForNumber:distance]];
+																	   }
 																	   [self.activityType setHidden:NO];
 																	   complete();
 																   }

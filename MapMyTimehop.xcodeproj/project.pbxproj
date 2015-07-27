@@ -19,6 +19,8 @@
 		9E95AB6A1B6578630008C77C /* hike.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB641B6578630008C77C /* hike.png */; };
 		9E95AB6B1B6578630008C77C /* run.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB651B6578630008C77C /* run.png */; };
 		9E95AB6C1B6578630008C77C /* walk.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB661B6578630008C77C /* walk.png */; };
+		9E9ED1541B66B627000F8CFA /* icons.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1531B66B627000F8CFA /* icons.png */; };
+		9E9ED1571B66C1ED000F8CFA /* SettingsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED1561B66C1ED000F8CFA /* SettingsModel.m */; };
 		9EA3E5AF1B62B13200C56D71 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5AE1B62B13200C56D71 /* main.m */; };
 		9EA3E5B21B62B13200C56D71 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5B11B62B13200C56D71 /* AppDelegate.m */; };
 		9EA3E5BA1B62B13200C56D71 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EA3E5B91B62B13200C56D71 /* Images.xcassets */; };
@@ -74,6 +76,9 @@
 		9E95AB641B6578630008C77C /* hike.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = hike.png; sourceTree = "<group>"; };
 		9E95AB651B6578630008C77C /* run.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = run.png; sourceTree = "<group>"; };
 		9E95AB661B6578630008C77C /* walk.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = walk.png; sourceTree = "<group>"; };
+		9E9ED1531B66B627000F8CFA /* icons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icons.png; sourceTree = "<group>"; };
+		9E9ED1551B66C1ED000F8CFA /* SettingsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsModel.h; sourceTree = "<group>"; };
+		9E9ED1561B66C1ED000F8CFA /* SettingsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsModel.m; sourceTree = "<group>"; };
 		9EA3E5A91B62B13200C56D71 /* MapMyTimeHop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapMyTimeHop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EA3E5AD1B62B13200C56D71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9EA3E5AE1B62B13200C56D71 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -222,6 +227,7 @@
 		9EA3E5F11B62B4B400C56D71 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				9E9ED1531B66B627000F8CFA /* icons.png */,
 				9E95AB611B6578630008C77C /* bike.png */,
 				9E95AB621B6578630008C77C /* dog.png */,
 				9E95AB631B6578630008C77C /* fitness.png */,
@@ -246,6 +252,8 @@
 				9EA3E5E11B62B49800C56D71 /* WorkoutToDisplay.m */,
 				9EA3E5DE1B62B49800C56D71 /* NotificationModel.h */,
 				9EA3E5DF1B62B49800C56D71 /* NotificationModel.m */,
+				9E9ED1551B66C1ED000F8CFA /* SettingsModel.h */,
+				9E9ED1561B66C1ED000F8CFA /* SettingsModel.m */,
 			);
 			name = Models;
 			sourceTree = "<group>";
@@ -406,6 +414,7 @@
 				9EA3E5BD1B62B13200C56D71 /* LaunchScreen.xib in Resources */,
 				9EA3E5BA1B62B13200C56D71 /* Images.xcassets in Resources */,
 				9E95AB671B6578630008C77C /* bike.png in Resources */,
+				9E9ED1541B66B627000F8CFA /* icons.png in Resources */,
 				9E95AB6B1B6578630008C77C /* run.png in Resources */,
 				9EA3E6021B62B4D800C56D71 /* MMTimeHopViewController.xib in Resources */,
 				9E95AB571B62CF730008C77C /* WorkoutCell.xib in Resources */,
@@ -468,6 +477,7 @@
 				9EA3E6131B62B54C00C56D71 /* UASDKConfig.m in Sources */,
 				9EA3E5E81B62B49800C56D71 /* NotificationModel.m in Sources */,
 				9EA3E60B1B62B51000C56D71 /* LocalNotificationView.m in Sources */,
+				9E9ED1571B66C1ED000F8CFA /* SettingsModel.m in Sources */,
 				9EA3E6141B62B54C00C56D71 /* Conversions.m in Sources */,
 				9EA3E60C1B62B51000C56D71 /* TableHeaderView.m in Sources */,
 				9EA3E6041B62B4D800C56D71 /* SettingsViewController.m in Sources */,

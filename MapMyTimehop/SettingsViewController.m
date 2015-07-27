@@ -10,7 +10,7 @@
 #import "UALoginViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "Conversions.h"
-
+#import "SettingsModel.h"
 @import UASDK;
 
 @interface SettingsViewController ()
@@ -27,75 +27,70 @@
 
 @property (nonatomic, retain) UAUser *user;
 @property (nonatomic, assign) BOOL finishedLoading;
+@property (weak, nonatomic) IBOutlet UIButton *doWorkout;
 
+@property (weak, nonatomic) IBOutlet UIImageView *icons;
 @property (nonatomic, strong) UINavigationBar* navigationBar;
+@property (weak, nonatomic) IBOutlet UILabel *activitiesVal;
+
+@property (weak, nonatomic) IBOutlet UIView *statsView;
+
+
 @end
 
 @implementation SettingsViewController
 
+
 - (void)viewDidLoad {
     [super viewDidLoad];
+	
 	self.title = @"Settings";
 	self.logout.layer.cornerRadius = 10;
 	self.logout.clipsToBounds = YES;
+	self.icons.contentMode = UIViewContentModeScaleAspectFit;
+	self.doWorkout.layer.cornerRadius = 10;
+	self.doWorkout.clipsToBounds = YES;
+	self.doWorkout.backgroundColor = [UIColor colorWithRed:0.16 green:0.48 blue:0.80 alpha:1.0];
+	self.avatar.layer.cornerRadius = self.avatar.frame.size.width /2;
+	self.avatar.layer.masksToBounds = YES;
+
+	self.view.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
+	self.statsView.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
 	
-	self.view.backgroundColor = [UIColor whiteColor];
 	self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0,[[UIApplication sharedApplication] keyWindow].frame.size.width, 64)];
 	self.navigationItem.title = @"Settings";
 	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"rsz_x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissView)];
 	[self.view addSubview:_navigationBar];
 	[self.navigationBar pushNavigationItem:self.navigationItem animated:NO];
-	
-	
-    // Do any additional setup after loading the view from its nib.
-}
-
-- (void)viewDidAppear:(BOOL)animated {
 	[self fetchUser];
 }
 
-- (void)fetchUser {
-	[[[UA sharedInstance] userManager] fetchAuthenticatedUser:^(UAUser *user, NSError *error) {
-		if(!error) {
-			self.user = user;
-			self.name.text = [NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName];
-			
-			NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-			[formatter setDateFormat:@"yyyy"];
-			NSString *dateString = [formatter stringFromDate:user.dateJoined];
-			
-			self.member.text = [NSString stringWithFormat:@"Member since %@", dateString];
-			self.location.text = [NSString stringWithFormat:@"%@, %@", user.locality, user.region];
-			
-			//[self.avatar setImage:[UIImage imageNamed:@"anon.png"]];
-			 //[self.avatar setImageWithURL:user.userProfilePhoto.mediumImageUrl];
-			NSLog(@"%@", user.userProfilePhoto.mediumImageUrl);
-			[self.avatar setImageWithURL:user.userProfilePhoto.mediumImageUrl placeholderImage:[UIImage imageNamed:@"anon"]];
-			self.finishedLoading = YES;
-			[self fetchAllTimeStats];
-		}
-	}];
+- (void)viewDidAppear:(BOOL)animated {
 }
 
-- (void)fetchAllTimeStats
-{
-	UAUserRef *userRef = [UAUserRef userRefWithUserID:self.user.userID];
-	UAUserStatsReportRef *userStatsReportRef = [UAUserStatsReportRef userStatsReportRefForUserRef:userRef dateRange:nil aggregationPeriod:UAAggregationPeriodTypeLifetime includeSummaryStats:YES];
+- (void)viewDidDisappear:(BOOL)animated {
+	[self.view removeFromSuperview];
+}
+
+- (void)fetchUser {
+	UAUser *user = [SettingsModel sharedInstance].user;
+	self.name.text = [NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName];
 	
-	UAUserStatsManager *manager = [[UA sharedInstance] userStatsManager];
-	[manager fetchUserStatsWithRef:userStatsReportRef response:^(id object, NSError *error) {
-		UAUserStatsReport *response = (UAUserStatsReport*)object;
-		if (error == nil) {
-			if (response.summary.count > 0) {
-				UAUserStats *lifetimeSummary = [response.summary firstObject];
-				[self setTotalCalories:@([Conversions convertJoulesToCalories:[lifetimeSummary.energy doubleValue]])];
-				[self setTotalDistance:lifetimeSummary.distance];
-				if(self.user.displayMeasurementSystem == UADisplayMeasurementImperial) {
-					self.milesKey.text = @"TOTAL MILES";
-				}
-			}
-		}
-	}];
+	NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+	[formatter setDateFormat:@"yyyy"];
+	NSString *dateString = [formatter stringFromDate:user.dateJoined];
+	
+	self.member.text = [NSString stringWithFormat:@"Member since %@", dateString];
+	self.location.text = [NSString stringWithFormat:@"%@, %@", user.locality, user.region];
+	
+	[self.avatar setImageWithURL:user.userProfilePhoto.largeImageUrl placeholderImage:[UIImage imageNamed:@"anon"]];
+	
+	UAUserStats *lifetimeSum = [SettingsModel sharedInstance].lifetimeSummary;
+	[self setTotalCalories:@([Conversions convertJoulesToCalories:[lifetimeSum.energy doubleValue]])];
+	
+	[self setTotalDistance:lifetimeSum.distance];
+	
+	self.activitiesVal.text = [lifetimeSum.activityCount stringValue];
 }
 
 - (void)setTotalDistance:(NSNumber*)meters
@@ -116,47 +111,28 @@
 }
 - (IBAction)logout:(id)sender {
 	UIAlertAction *logOutAction;
-	UIAlertAction *otherAction;
+	UIAlertAction *cancelAction;
 	UIAlertController *alertController= [UIAlertController alertControllerWithTitle:@"Are you sure you want to log out?" message:nil preferredStyle:UIAlertControllerStyleActionSheet];
 
 	logOutAction = [UIAlertAction actionWithTitle:@"Log Out"
-											 style:UIAlertActionStyleDefault
+											 style:UIAlertActionStyleDestructive
 										   handler:^(UIAlertAction *action) {
 											   [[UA sharedInstance] logout:^(NSError *error) {
 												   [[NSNotificationCenter defaultCenter] postNotificationName:@"loggedOut" object:nil];
 												   [self showLogin:YES];
 											   }];
 										   }];
-	otherAction = [UIAlertAction actionWithTitle:@"Cancel"
-										   style:UIAlertActionStyleDefault
+	cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+										   style:UIAlertActionStyleCancel
 										 handler:^(UIAlertAction *action) {
-											 // do something here
+											 //cancel
 										 }];
 	[alertController addAction:logOutAction];
-	[alertController addAction:otherAction];
-	
+	[alertController addAction:cancelAction];
+	alertController.view.tintColor = [UIColor grayColor];
 	alertController.popoverPresentationController.sourceView = self.view;
 	[self presentViewController:alertController animated:YES
 					 completion:nil];
-}
-
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
-{
-	switch(buttonIndex) {
-		case 0: //"No" pressed
-			//do something?
-			break;
-		case 1: //"Yes" pressed
-			//here you pop the viewController
-			
-			[[UA sharedInstance] logout:^(NSError *error) {
-				[[NSNotificationCenter defaultCenter] postNotificationName:@"loggedOut" object:nil];
-				[self showLogin:YES];
-			}];
-
-			break;
-	}
 }
 
 - (void)showLogin:(BOOL)animated
@@ -181,6 +157,16 @@
 
 - (void)dismissView {
 	[self dismissViewControllerAnimated:YES completion:nil];
+}
+
+- (IBAction)openApp:(id)sender {
+	NSURL *url = [NSURL URLWithString:@"mmapps://"];
+	if([[UIApplication sharedApplication] canOpenURL:url]) {
+		[[UIApplication sharedApplication] openURL:url];
+	} else {
+		url = [NSURL URLWithString:@"https://itunes.apple.com/us/app/map-my-fitness-gps-workout/id298903147?mt=8"];
+		[[UIApplication sharedApplication] openURL:url];
+	}
 }
 
 /*

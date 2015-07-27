@@ -32,6 +32,7 @@
                 <constraint firstAttribute="bottom" secondItem="gFn-0Z-uhG" secondAttribute="bottom" constant="8" id="cuv-8T-RBq"/>
             </constraints>
             <nil key="simulatedStatusBarMetrics"/>
+            <simulatedOrientationMetrics key="simulatedOrientationMetrics"/>
             <point key="canvasLocation" x="222" y="349"/>
         </view>
     </objects>

@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface SettingsViewController : UIViewController
-// about me
 @property (weak, nonatomic) IBOutlet UIView *aboutMeView;
 @property (weak, nonatomic) IBOutlet UIView *aboutMeSubView;
 @end

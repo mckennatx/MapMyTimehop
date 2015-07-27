@@ -14,6 +14,7 @@
 #import "SettingsViewController.h"
 #import "Conversions.h"
 #import "WorkoutCell.h"
+#import "SettingsModel.h"
 
 static const NSInteger maxLoad = 4;
 
@@ -31,6 +32,10 @@ static const NSInteger maxLoad = 4;
 @property (nonatomic, strong) WorkoutToDisplay *oneYear;
 @property (nonatomic, strong) WorkoutToDisplay *twoYear;
 @property (nonatomic, strong) WorkoutToDisplay *threeYear;
+
+@property (nonatomic, retain) NSMutableArray *workouts;
+@property (nonatomic, retain) NSMutableArray *allWorkouts;
+@property (nonatomic, strong) UIRefreshControl *refreshControl;
 
 @end
 
@@ -62,11 +67,45 @@ static const NSInteger maxLoad = 4;
 	if(!self.allWorkoutsLoaded)
 		[LoadingView showModalLoadingViewWithText:@"loading workouts..."];
 	
+	self.refreshControl = [[UIRefreshControl alloc] init];
+	self.refreshControl.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
+
+	self.refreshControl.tintColor = [UIColor whiteColor];
+	[self.refreshControl addTarget:self
+							action:@selector(updateWorkouts)
+				  forControlEvents:UIControlEventValueChanged];
+	[self.tableView addSubview:self.refreshControl];
+	
+	if(!self.allWorkoutsLoaded) {
+		NSDate *date = [self previousDate:kOneMonth];
+		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kOneYear];
+		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kTwoYear];
+		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kThreeYear];
+		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	}
+	
+	[self fetchUser];
+	
+	self.workouts = [[NSMutableArray alloc] init];
+	self.allWorkouts = [[NSMutableArray alloc] init];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTable) name:@"reloadTable" object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggedOut) name:@"loggedOut" object:nil];
+}
 
+- (void)updateWorkouts {
+	self.pullToRefresh = YES;
+	self.allWorkoutsLoaded = NO;
+	self.numLoaded = 0;
+	[self.workouts removeAllObjects];
+	[self.oneMonth refresh];
+	[self.oneYear refresh];
+	[self.twoYear refresh];
+	[self.threeYear refresh];
 }
 
 - (void)loggedOut {
@@ -90,26 +129,27 @@ static const NSInteger maxLoad = 4;
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
-	if(!self.allWorkoutsLoaded) {
-		NSDate *date = [self previousDate:kOneMonth];
 	
-		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-		date = [self previousDate:kOneYear];
-		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-		date = [self previousDate:kTwoYear];
-		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-		date = [self previousDate:kThreeYear];
-		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-	}
-	//refresh table
+
 	[self.tableView reloadData];
+}
+
+- (void)viewDidDisappear:(BOOL)animated {
+	[self.view removeFromSuperview];
 }
 
 - (void)updateTable {
 	++self.numLoaded;
-	if(self.numLoaded == maxLoad) {
+	if(self.numLoaded == maxLoad-1) {
+		[self.workouts addObject:self.oneMonth];
+		[self.workouts addObject:self.oneYear];
+		[self.workouts addObject:self.twoYear];
+		[self.workouts addObject:self.threeYear];
+
 		self.allWorkoutsLoaded = YES;
 		[LoadingView dismissModalLoadingView];
+		if(self.pullToRefresh)
+			[self.refreshControl endRefreshing];
 	}
 	
 	[self.tableView reloadData];
@@ -119,7 +159,7 @@ static const NSInteger maxLoad = 4;
 //add completion block
 - (void)pullWorkoutsWithBlock:(void (^)())complete
 {
-	NSDate *date = [self previousDate:kOneMonth];
+	NSDate *date = [[NSDate alloc] init];
 	_listArray = [NSMutableArray array];
 	_workoutListRef = [UAWorkoutListRef workoutListRefWithUserReference:[[UA sharedInstance] authenticatedUserRef] createdBefore:date];
 	
@@ -130,7 +170,7 @@ static const NSInteger maxLoad = 4;
 	void(^responseBlock)(UAWorkoutList *list) = ^(UAWorkoutList *list){
 		BOOL nextPageAvailable = list.nextRef != nil;
 		
-		[_listArray addObject:list];
+		[_listArray addObject:list.objects];
 		
 		if(nextPageAvailable) {
 			_workoutListRef = list.nextRef;
@@ -144,9 +184,10 @@ static const NSInteger maxLoad = 4;
 	
 	requestBlock = ^{
 		[workoutManager fetchWorkoutsWithListRef:_workoutListRef
-										response:^(id object, NSError *error) {
+								 withCachePolicy:UACacheElseNetwork
+										response:^(UAWorkoutList *list, NSError *error) {
 			if (!error) {
-				responseBlock((UAWorkoutList *)object);
+				responseBlock((UAWorkoutList *)list);
 			}
 			else {
 				UALogError(@"Error retriving available workouts: %@", error);
@@ -188,21 +229,32 @@ static const NSInteger maxLoad = 4;
 
 #pragma mark - Table view data source
 
-//- (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section {
-//	return [self.tableHeaders objectAtIndex:section];
-//}
-
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 	UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 18)];
 	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width/2, 24)];
 	label.layer.cornerRadius = 5;
 	label.clipsToBounds = YES;
-	[label setFont:[UIFont fontWithName:@"OpenSans-Bold" size:12.5]];
-	[label setTextColor:[UIColor whiteColor]];
+	[label setFont:[Conversions regularFontWithSize:17]];
+	 [label setTextColor:[UIColor whiteColor]];
 	[label setTextAlignment:NSTextAlignmentCenter];
 	[label setText:[[self.tableHeaders objectAtIndex:section] uppercaseString]];
 	[label setBackgroundColor:[self.sectionColors objectAtIndex:section]];
 
+	
+	[view addSubview:label];
+	
+	return view;
+}
+
+- (UIView *)tableView:(UITableView *)tableView viewForFooterInSection:(NSInteger)section {
+	UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 18)];
+	UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 22)];
+	[label setFont:[UIFont systemFontOfSize:13]];
+	[label setTextColor:[UIColor grayColor]];
+	[label setTextAlignment:NSTextAlignmentCenter];
+	
+	if(self.allWorkoutsLoaded)
+		label.text = [NSString stringWithFormat:@"TOTAL CALORIES BURNED: %d", (int) [[self.workouts objectAtIndex:section]totalCalories]];
 	
 	[view addSubview:label];
 	
@@ -214,6 +266,10 @@ static const NSInteger maxLoad = 4;
 	return 44.0f;
 }
 
+-(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:
+(NSInteger)section{
+	return 38.0f;
+}
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -223,26 +279,11 @@ static const NSInteger maxLoad = 4;
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
 	NSInteger count=1;
-	switch (section)
-	{
-		case 0:
-			if(self.oneMonth.hasPastWorkoutFromTodaysDate)
-				count = [self.oneMonth.pastWorkoutsFromDate count];
-			break;
-		case 1:
-			if(self.oneYear.hasPastWorkoutFromTodaysDate)
-				count = [self.oneYear.pastWorkoutsFromDate count];
-			break;
-		case 2:
-			if(self.twoYear.hasPastWorkoutFromTodaysDate)
-				count = [self.twoYear.pastWorkoutsFromDate count];
-			break;
-		case 3:
-			if(self.threeYear.hasPastWorkoutFromTodaysDate)
-				count = [self.threeYear.pastWorkoutsFromDate count];
-			break;
-		default:
-			break;
+	
+	if(self.allWorkoutsLoaded) {
+		if([[self.workouts objectAtIndex:section] hasPastWorkoutFromTodaysDate]) {
+			count = [[[self.workouts objectAtIndex:section] pastWorkoutsFromDate] count];
+		}
 	}
 	
 	return count;
@@ -250,12 +291,6 @@ static const NSInteger maxLoad = 4;
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//	static NSString *CellIdentifier = @"Cell";
-//	
-//	UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-//	if(!cell) {
-//		cell = [[UITableViewCell alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, self.tableView.rowHeight)];
-//	}
 	static NSString *CellIdentifier = @"Cell";
 	
 	
@@ -266,37 +301,11 @@ static const NSInteger maxLoad = 4;
 	}
 	
 	if(self.allWorkoutsLoaded) {
-		switch(indexPath.section) {
-			case 0:
-				if(self.oneMonth.hasPastWorkoutFromTodaysDate)
-					[cell setWorkout:self.oneMonth.pastWorkoutsFromDate[indexPath.row]];
-				else
-					[cell setNoWorkout];
-				
-				break;
-			case 1:
-				if(self.oneYear.hasPastWorkoutFromTodaysDate)
-					[cell setWorkout:self.oneYear.pastWorkoutsFromDate[indexPath.row]];
-				else
-					[cell setNoWorkout];
-				
-				break;
-			case 2:
-				if(self.twoYear.hasPastWorkoutFromTodaysDate)
-					[cell setWorkout:self.twoYear.pastWorkoutsFromDate[indexPath.row]];
-				else
-					[cell setNoWorkout];
-				
-				break;
-			case 3:
-				if(self.threeYear.hasPastWorkoutFromTodaysDate)
-					[cell setWorkout:self.threeYear.pastWorkoutsFromDate[indexPath.row]];
-				else
-					[cell setNoWorkout];
-				break;
-			default:
-				break;
+		if([[self.workouts objectAtIndex:indexPath.section] hasPastWorkoutFromTodaysDate]) {
+			[cell setWorkout:[[[self.workouts objectAtIndex:indexPath.section] pastWorkoutsFromDate] objectAtIndex:indexPath.row]];
 		}
+		else
+			[cell setNoWorkout];
 	}
 	return cell;
 }
@@ -347,5 +356,48 @@ static const NSInteger maxLoad = 4;
 		[self dismissViewControllerAnimated:YES completion:NULL];
 	}
 }
+
+- (void)fetchUser {
+	[[[UA sharedInstance] userManager] fetchAuthenticatedUser:^(UAUser *user, NSError *error) {
+		if(!error) {
+			[[SettingsModel sharedInstance] setUser:user];
+			
+			///self.name.text = [NSString stringWithFormat:@"%@ %@", user.firstName, user.lastName];
+			
+			NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+			[formatter setDateFormat:@"yyyy"];
+			NSString *dateString = [formatter stringFromDate:user.dateJoined];
+			
+			//self.member.text = [NSString stringWithFormat:@"Member since %@", dateString];
+			//self.location.text = [NSString stringWithFormat:@"%@, %@", user.locality, user.region];
+			
+			//[self.avatar setImageWithURL:user.userProfilePhoto.largeImageUrl placeholderImage:[UIImage imageNamed:@"anon"]];
+			//self.finishedLoading = YES;
+			[self fetchAllTimeStats];
+		}
+	}];
+}
+
+- (void)fetchAllTimeStats
+{
+	UAUserRef *userRef = [UAUserRef userRefWithUserID:[SettingsModel sharedInstance].user.userID];
+	UAUserStatsReportRef *userStatsReportRef = [UAUserStatsReportRef userStatsReportRefForUserRef:userRef dateRange:nil aggregationPeriod:UAAggregationPeriodTypeLifetime includeSummaryStats:YES];
+	
+	UAUserStatsManager *manager = [[UA sharedInstance] userStatsManager];
+	[manager fetchUserStatsWithRef:userStatsReportRef response:^(id object, NSError *error) {
+		UAUserStatsReport *response = (UAUserStatsReport*)object;
+		if (error == nil) {
+			if (response.summary.count > 0) {
+				[[SettingsModel sharedInstance] setLifetimeSummary:[response.summary firstObject]];
+//				[self setTotalCalories:@([Conversions convertJoulesToCalories:[lifetimeSummary.energy doubleValue]])];
+//				[self setTotalDistance:lifetimeSummary.distance];
+//				if(self.user.displayMeasurementSystem == UADisplayMeasurementMetric) {
+//					self.milesKey.text = @"TOTAL KILOMETERS: ";
+//				}
+			}
+		}
+	}];
+}
+
 
 @end

@@ -60,8 +60,7 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 {
 	self.window.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
-	
-	//UIColor *barTint = [UIColor colorWithRed:0.90 green:0.45 blue:0.00 alpha:1.0];
+
 	UIColor *barTint = [UIColor colorWithRed:0.16 green:0.81 blue:0.77 alpha:1.0];
 	
 	[[UINavigationBar appearance] setBarTintColor:barTint];

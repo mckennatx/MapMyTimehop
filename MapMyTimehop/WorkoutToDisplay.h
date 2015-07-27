@@ -16,5 +16,6 @@
 @property (nonatomic, copy) NSMutableArray *pastWorkoutsFromDate;
 @property (nonatomic, copy) NSMutableArray *pastActivities;
 - (instancetype)initWithFilterDate:(NSDate *)filter;
-
+- (instancetype)refresh;
+- (CGFloat)totalCalories;
 @end
