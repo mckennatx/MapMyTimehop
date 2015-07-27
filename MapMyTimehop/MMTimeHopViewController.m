@@ -129,8 +129,17 @@ static const NSInteger maxLoad = 4;
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 	
+	if(!self.allWorkoutsLoaded) {
+		NSDate *date = [self previousDate:kOneMonth];
+		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kOneYear];
+		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kTwoYear];
+		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		date = [self previousDate:kThreeYear];
+		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+	}
 	
-
 	[self.tableView reloadData];
 }
 
