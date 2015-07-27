@@ -21,6 +21,7 @@
 		9E95AB6C1B6578630008C77C /* walk.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB661B6578630008C77C /* walk.png */; };
 		9E9ED1541B66B627000F8CFA /* icons.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1531B66B627000F8CFA /* icons.png */; };
 		9E9ED1571B66C1ED000F8CFA /* SettingsModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED1561B66C1ED000F8CFA /* SettingsModel.m */; };
+		9E9ED15B1B66EA36000F8CFA /* UICustomColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED15A1B66EA36000F8CFA /* UICustomColors.m */; };
 		9EA3E5AF1B62B13200C56D71 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5AE1B62B13200C56D71 /* main.m */; };
 		9EA3E5B21B62B13200C56D71 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5B11B62B13200C56D71 /* AppDelegate.m */; };
 		9EA3E5BA1B62B13200C56D71 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9EA3E5B91B62B13200C56D71 /* Images.xcassets */; };
@@ -79,6 +80,8 @@
 		9E9ED1531B66B627000F8CFA /* icons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icons.png; sourceTree = "<group>"; };
 		9E9ED1551B66C1ED000F8CFA /* SettingsModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SettingsModel.h; sourceTree = "<group>"; };
 		9E9ED1561B66C1ED000F8CFA /* SettingsModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SettingsModel.m; sourceTree = "<group>"; };
+		9E9ED1591B66EA36000F8CFA /* UICustomColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UICustomColors.h; sourceTree = "<group>"; };
+		9E9ED15A1B66EA36000F8CFA /* UICustomColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UICustomColors.m; sourceTree = "<group>"; };
 		9EA3E5A91B62B13200C56D71 /* MapMyTimeHop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapMyTimeHop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EA3E5AD1B62B13200C56D71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9EA3E5AE1B62B13200C56D71 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -294,6 +297,8 @@
 		9EA3E6151B62B55300C56D71 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				9E9ED1591B66EA36000F8CFA /* UICustomColors.h */,
+				9E9ED15A1B66EA36000F8CFA /* UICustomColors.m */,
 				9EA3E60F1B62B54C00C56D71 /* UASDKConfig.h */,
 				9EA3E6101B62B54C00C56D71 /* UASDKConfig.m */,
 				9EA3E6111B62B54C00C56D71 /* Conversions.h */,
@@ -469,6 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9EA3E6031B62B4D800C56D71 /* UALoginViewController.m in Sources */,
+				9E9ED15B1B66EA36000F8CFA /* UICustomColors.m in Sources */,
 				9E95AB561B62CF730008C77C /* WorkoutCell.m in Sources */,
 				9EA3E5FF1B62B4D800C56D71 /* LocalNotificationController.m in Sources */,
 				9EA3E6011B62B4D800C56D71 /* LoadingView.m in Sources */,

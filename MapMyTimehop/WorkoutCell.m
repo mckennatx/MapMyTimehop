@@ -8,6 +8,7 @@
 
 #import "WorkoutCell.h"
 #import "UIImageView+AFNetworking.h"
+#import "UICustomColors.h"
 #import "Conversions.h"
 
 static NSString* const kBikePath = @"bike.png";
@@ -17,21 +18,28 @@ static NSString* const kDogPath = @"dogwalk.png";
 static NSString* const kHikePath = @"hike.png";
 
 @interface WorkoutCell ()
+
 @property (nonatomic, retain) UAWorkout *exercise;
+
 @end
 
 @implementation WorkoutCell
 
 - (void)awakeFromNib {
-	self.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
+	self.backgroundColor = [UICustomColors backgroundGray];
+	
 	self.background.layer.cornerRadius = self.background.frame.size.width /2;
 	self.background.layer.masksToBounds = YES;
-	[self.workoutName setFont:[Conversions boldFontWithSize:18]];
-	[self.activityType setFont:[Conversions lightFontWithSize:12]];
-	[self.distanceVal setFont:[Conversions lightFontWithSize:12]];
-	[self.distanceLabel setFont:[Conversions semiboldFontWithSize:12]];
-	[self.activityLabel setFont:[Conversions semiboldFontWithSize:12]];
+	
+	[self.workoutName setFont:[UIFont boldSystemFontOfSize:18]];
+	
+	[self.activityType setFont:[UIFont systemFontOfSize:12]];
+	[self.distanceVal setFont:[UIFont systemFontOfSize:12]];
+	[self.distanceLabel setFont:[UIFont boldSystemFontOfSize:12]];
+	[self.activityLabel setFont:[UIFont boldSystemFontOfSize:12]];
+
 	self.iconImages = [self setIconImageArray];
+	
 	[self.workoutName setHidden:YES];
 	[self.activityType setHidden:YES];
 	[self.distanceVal setHidden:YES];
@@ -42,16 +50,18 @@ static NSString* const kHikePath = @"hike.png";
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
-
 }
 
 - (void)setWorkout:(UAWorkout *)workout {
-	//self.background.backgroundColor = HEXCOLOR(0x002D72FF);
 	self.exercise = workout;
 	self.ref = [workout activityTypeRef];
+	
 	[self activitiesToDisplayWithBlock: ^ {
+	
 	}];
+	
 	self.workoutName.text = [workout workoutName];
+	
 	[self.workoutName setHidden:NO];
 	[self.distanceVal setHidden:NO];
 	[self.distanceLabel setHidden:NO];
@@ -61,12 +71,14 @@ static NSString* const kHikePath = @"hike.png";
 
 - (void)setNoWorkout {
 	UIImageView *noWorkoutImg = [[UIImageView alloc] initWithFrame:CGRectMake(20, 10, 20, 20)];
-	self.workoutName.text = @"NO WORKOUTS WERE FOUND";
-	[self.workoutName setFont:[Conversions lightFontWithSize:14]];
-	self.workoutName.textColor = [UIColor colorWithRed:0.63 green:0.64 blue:0.60 alpha:1.0];
 	[noWorkoutImg setImage:[UIImage imageNamed:@"noactivity.png"]];
-	[self.workoutName setHidden:NO];
 	[self addSubview:noWorkoutImg];
+
+	self.workoutName.text = @"NO WORKOUTS WERE FOUND";
+	[self.workoutName setFont:[UIFont systemFontOfSize:14]];
+	self.workoutName.textColor = [UIColor grayColor];
+	self.workoutName.textColor = [UIColor colorWithRed:0.63 green:0.64 blue:0.60 alpha:1.0];
+	[self.workoutName setHidden:NO];
 }
 
 - (void)activitiesToDisplayWithBlock:(void (^)())complete{

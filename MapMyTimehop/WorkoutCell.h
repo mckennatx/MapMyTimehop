@@ -18,17 +18,21 @@ typedef enum {
 } icon;
 
 @interface WorkoutCell : UITableViewCell
+
+@property (nonatomic, assign) UAActivityTypeReference *ref;
+
 @property (nonatomic, copy) NSMutableArray *iconImages;
+
 @property (weak, nonatomic) IBOutlet UILabel *workoutName;
 @property (weak, nonatomic) IBOutlet UILabel *distanceVal;
 @property (weak, nonatomic) IBOutlet UILabel *activityType;
-@property (weak, nonatomic) IBOutlet UIImageView *background;
-@property (nonatomic, assign) UAActivityTypeReference *ref;
 @property (weak, nonatomic) IBOutlet UILabel *activityLabel;
 @property (weak, nonatomic) IBOutlet UILabel *distanceLabel;
+
+@property (weak, nonatomic) IBOutlet UIImageView *background;
+
 - (void)setWorkout:(UAWorkout *)workout;
 - (void)setNoWorkout;
-
 + (CGFloat)cellHeight;
 
 @end

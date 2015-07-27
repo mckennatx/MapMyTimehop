@@ -10,36 +10,38 @@
 #import "UALoginViewController.h"
 #import "UIImageView+AFNetworking.h"
 #import "Conversions.h"
+#import "UICustomColors.h"
 #import "SettingsModel.h"
+
 @import UASDK;
 
 @interface SettingsViewController ()
+@property (weak, nonatomic) IBOutlet UIView *statsView;
+@property (weak, nonatomic) IBOutlet UIView *aboutMeView;
+@property (weak, nonatomic) IBOutlet UIView *aboutMeSubView;
+
+@property (nonatomic, strong) UINavigationBar* navigationBar;
 
 @property (weak, nonatomic) IBOutlet UIImageView *avatar;
-@property (weak, nonatomic) IBOutlet UILabel *name;
+@property (weak, nonatomic) IBOutlet UIImageView *icons;
 
+@property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *member;
-@property (weak, nonatomic) IBOutlet UIButton *logout;
 @property (weak, nonatomic) IBOutlet UILabel *location;
 @property (weak, nonatomic) IBOutlet UILabel *distanceVal;
 @property (weak, nonatomic) IBOutlet UILabel *caloriesVal;
-@property (weak, nonatomic) IBOutlet UILabel *milesKey;
-
-@property (nonatomic, retain) UAUser *user;
-@property (nonatomic, assign) BOOL finishedLoading;
-@property (weak, nonatomic) IBOutlet UIButton *doWorkout;
-
-@property (weak, nonatomic) IBOutlet UIImageView *icons;
-@property (nonatomic, strong) UINavigationBar* navigationBar;
 @property (weak, nonatomic) IBOutlet UILabel *activitiesVal;
 
-@property (weak, nonatomic) IBOutlet UIView *statsView;
+@property (weak, nonatomic) IBOutlet UIButton *logout;
+@property (weak, nonatomic) IBOutlet UIButton *doWorkout;
 
+@property (nonatomic, retain) UAUser *user;
+
+@property (nonatomic, assign) BOOL finishedLoading;
 
 @end
 
 @implementation SettingsViewController
-
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -54,8 +56,8 @@
 	self.avatar.layer.cornerRadius = self.avatar.frame.size.width /2;
 	self.avatar.layer.masksToBounds = YES;
 
-	self.view.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
-	self.statsView.backgroundColor = RGBACOLOR(227, 227, 227, 1.0);
+	self.view.backgroundColor = [UICustomColors backgroundGray];
+	self.statsView.backgroundColor = [UICustomColors backgroundGray];
 	
 	self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0,[[UIApplication sharedApplication] keyWindow].frame.size.width, 64)];
 	self.navigationItem.title = @"Settings";
@@ -65,11 +67,12 @@
 	[self fetchUser];
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-}
-
 - (void)viewDidDisappear:(BOOL)animated {
 	[self.view removeFromSuperview];
+}
+
+- (void)dismissView {
+	[self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)fetchUser {
@@ -104,11 +107,7 @@
 	self.caloriesVal.text = [Conversions rollupStringForNumber:kCal];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-	NSLog(@"memory warning received");
-    // Dispose of any resources that can be recreated.
-}
+
 - (IBAction)logout:(id)sender {
 	UIAlertAction *logOutAction;
 	UIAlertAction *cancelAction;
@@ -118,6 +117,10 @@
 											 style:UIAlertActionStyleDestructive
 										   handler:^(UIAlertAction *action) {
 											   [[UA sharedInstance] logout:^(NSError *error) {
+												   //erase everything
+												   [SettingsModel sharedInstance].user = nil;
+												   [SettingsModel sharedInstance].lifetimeSummary = nil;
+												   [SettingsModel sharedInstance].allWorkoutsLoaded = NO;
 												   [[NSNotificationCenter defaultCenter] postNotificationName:@"loggedOut" object:nil];
 												   [self showLogin:YES];
 											   }];
@@ -127,6 +130,7 @@
 										 handler:^(UIAlertAction *action) {
 											 //cancel
 										 }];
+	
 	[alertController addAction:logOutAction];
 	[alertController addAction:cancelAction];
 	alertController.view.tintColor = [UIColor grayColor];
@@ -155,10 +159,6 @@
 	}
 }
 
-- (void)dismissView {
-	[self dismissViewControllerAnimated:YES completion:nil];
-}
-
 - (IBAction)openApp:(id)sender {
 	NSURL *url = [NSURL URLWithString:@"mmapps://"];
 	if([[UIApplication sharedApplication] canOpenURL:url]) {
@@ -169,14 +169,11 @@
 	}
 }
 
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark - Memory Management
+- (void)didReceiveMemoryWarning {
+	[super didReceiveMemoryWarning];
+	NSLog(@"memory warning received");
+	// Dispose of any resources that can be recreated.
 }
-*/
 
 @end

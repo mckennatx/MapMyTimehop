@@ -14,5 +14,6 @@
 + (SettingsModel *)sharedInstance;
 @property (nonatomic, retain) UAUser *user;
 @property (nonatomic, retain) UAUserStats *lifetimeSummary;
+@property (nonatomic, assign) BOOL allWorkoutsLoaded;
 
 @end

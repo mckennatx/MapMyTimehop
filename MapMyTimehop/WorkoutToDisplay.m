@@ -26,7 +26,6 @@
 		_filterDate = filter;
 		_hasPastWorkoutFromTodaysDate = NO;
 		_pastWorkoutsFromDate = [[NSMutableArray alloc] init];
-		_pastActivities = [[NSMutableArray alloc] init];
 		[self workoutsToDisplayWithBlock:^{
 			self.loadedWorkouts = YES;
 			[self parseWorkouts];
@@ -94,8 +93,5 @@
 	}
 	return totalCal;
 }
-
-
-
 
 @end
