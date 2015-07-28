@@ -73,23 +73,12 @@ static const NSInteger maxLoad = 4;
 	
 	self.refreshControl = [[UIRefreshControl alloc] init];
 	self.refreshControl.backgroundColor = [UICustomColors backgroundGray];
-
 	self.refreshControl.tintColor = [UIColor whiteColor];
+
 	[self.refreshControl addTarget:self
 							action:@selector(updateWorkouts)
 				  forControlEvents:UIControlEventValueChanged];
 	[self.tableView addSubview:self.refreshControl];
-	
-	if(![SettingsModel sharedInstance].allWorkoutsLoaded) {
-		NSDate *date = [self previousDate:kOneMonth];
-		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-		date = [self previousDate:kOneYear];
-		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-		date = [self previousDate:kTwoYear];
-		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-		date = [self previousDate:kThreeYear];
-		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
-	}
 	
 	[self fetchUser];
 	
@@ -317,6 +306,7 @@ static const NSInteger maxLoad = 4;
 		[offsetComponents setMonth:-1]; // setting date to 1 month ago
 	else
 		[offsetComponents setYear:-diff]; // setting year to diff
+	[offsetComponents setDay:+1];
 	NSDate *date = [gregorian dateByAddingComponents:offsetComponents toDate:today options:0];
 	
 	return date;

@@ -12,9 +12,10 @@
 @interface WorkoutToDisplay : NSObject
 
 @property (nonatomic, assign) BOOL hasPastWorkoutFromTodaysDate;
-@property (nonatomic, copy) NSDate *filterDate;
-@property (nonatomic, copy) NSMutableArray *pastWorkoutsFromDate;
+@property (nonatomic, retain) NSMutableArray *pastWorkoutsFromDate;
+
 - (instancetype)initWithFilterDate:(NSDate *)filter;
 - (instancetype)refresh;
 - (CGFloat)totalCalories;
+
 @end
