@@ -6,6 +6,7 @@
 //
 //
 
+#import <MapKit/MapKit.h>
 #import "MMTimeHopViewController.h"
 #import "AppDelegate.h"
 #import "UALoginViewController.h"
@@ -18,6 +19,7 @@
 #import "SettingsModel.h"
 
 static const NSInteger maxLoad = 4;
+static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 
 @interface MMTimeHopViewController ()
 
@@ -248,6 +250,50 @@ static const NSInteger maxLoad = 4;
 	return cell;
 }
 
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	[tableView deselectRowAtIndexPath:indexPath animated:YES];
+	if([[self.workouts objectAtIndex:indexPath.section] hasPastWorkoutFromTodaysDate]) {
+		UAWorkout *workout = [[[self.workouts objectAtIndex:indexPath.section] pastWorkoutsFromDate] objectAtIndex:indexPath.row];
+
+		NSString *stringURL = [NSString stringWithFormat:kWorkoutDetails, workout.ref.entityID];
+		NSURL *url = [NSURL URLWithString:stringURL];
+		if([[UIApplication sharedApplication] canOpenURL:url]) {
+			[[UIApplication sharedApplication] openURL:url];
+		} else {
+			url = [NSURL URLWithString:@"https://itunes.apple.com/us/app/map-my-fitness-gps-workout/id298903147?mt=8"];
+			[[UIApplication sharedApplication] openURL:url];
+		}
+	} else {
+		UIAlertAction *workout;
+		UIAlertAction *cancelAction;
+		NSString *message = [NSString stringWithFormat:@"No workouts recorded %@", self.tableHeaders[indexPath.section]];
+		UIAlertController *alertController= [UIAlertController alertControllerWithTitle:@"No Workouts Found" message:message preferredStyle:UIAlertControllerStyleAlert];
+		
+		workout = [UIAlertAction actionWithTitle:@"Record a Workout"
+										   style:UIAlertActionStyleDefault
+										   handler:^(UIAlertAction *action) {
+											   NSURL *url = [NSURL URLWithString:@"mmapps://"];
+											   if([[UIApplication sharedApplication] canOpenURL:url]) {
+												   [[UIApplication sharedApplication] openURL:url];
+											   } else {
+												   url = [NSURL URLWithString:@"https://itunes.apple.com/us/app/map-my-fitness-gps-workout/id298903147?mt=8"];
+												   [[UIApplication sharedApplication] openURL:url];
+											   }
+										   }];
+		cancelAction = [UIAlertAction actionWithTitle:@"Cancel"
+												style:UIAlertActionStyleDestructive
+											  handler:^(UIAlertAction *action) {
+												  //cancel
+											  }];
+		
+		[alertController addAction:workout];
+		[alertController addAction:cancelAction];
+		alertController.view.tintColor = [UIColor blueColor];
+		
+		[self presentViewController:alertController animated:YES completion:nil];
+	}
+}
+
 #pragma mark - Menu Generation Methods
 - (NSMutableArray *)buildTableHeaders
 {
@@ -383,8 +429,13 @@ static const NSInteger maxLoad = 4;
 #pragma mark - Memory Management
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
-	NSLog(@"memory warning received");
-	// Dispose of any resources that can be recreated.
+	NSLog(@"MMTIMEHOP: memory warning received");
+	self.allWorkoutsLoaded = NO;
+	self.oneMonth = nil;
+	self.oneYear = nil;
+	self.twoYear = nil;
+	self.threeYear = nil;
+	[self.workouts removeAllObjects];
 }
 
 @end

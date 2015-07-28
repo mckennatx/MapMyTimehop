@@ -10,8 +10,10 @@
 #import "UIImageView+AFNetworking.h"
 #import "UICustomColors.h"
 #import "Conversions.h"
+#import "SettingsModel.h"
 
 static NSString* const kBikePath = @"bike.png";
+static NSString*const kRodePath = @"road.png";
 static NSString* const kWalkPath = @"walk.png";
 static NSString* const kRunPath = @"run.png";
 static NSString* const kDogPath = @"dogwalk.png";
@@ -45,6 +47,7 @@ static NSString* const kHikePath = @"hike.png";
 	[self.distanceVal setHidden:YES];
 	[self.distanceLabel setHidden:YES];
 	[self.activityLabel setHidden:YES];
+	[self.background setHidden:YES];
 	
 }
 
@@ -57,7 +60,22 @@ static NSString* const kHikePath = @"hike.png";
 	self.ref = [workout activityTypeRef];
 	
 	[self activitiesToDisplayWithBlock: ^ {
+		
+	}];
 	
+	
+	UARouteManager *manager = [UA sharedInstance].routeManager;
+	[manager fetchRouteWithRef:workout.routeRef withDetails:YES response:^(UARoute *object, NSError *error) {
+		if (!error)
+		{
+			UARoute *route = object;
+			if (route)
+			{
+				NSURL *url = [route thumbnailUrlWithWidth:300 height:100];
+				NSLog(@"%@", url);
+				return;
+			}
+		}
 	}];
 	
 	self.workoutName.text = [workout workoutName];
@@ -100,12 +118,17 @@ static NSString* const kHikePath = @"hike.png";
 																	   } else {
 																		   self.distanceLabel.text = @"Total Distance: ";
 																		   UAWorkoutAggregate *agg = (UAWorkoutAggregate *)[self.exercise aggregate];
-																		   NSNumber *distance = @([Conversions distanceInUserUnits:[[agg distanceTotal] doubleValue] measurement:UADisplayMeasurementImperial]);
-																		   self.distanceVal.text = [NSString stringWithFormat:@"%@ miles", [Conversions rollupStringForNumber:distance]];
+																		   NSNumber *distance = @([Conversions distanceInUserUnits:[[agg distanceTotal] doubleValue] measurement:[SettingsModel sharedInstance].user.displayMeasurementSystem]);
+																		   NSString *distanceLabel = @"miles";
+																		   if([SettingsModel sharedInstance].user.displayMeasurementSystem == UADisplayMeasurementMetric) {
+																			   distanceLabel = @"kilometers";
+																		   }
+																		   self.distanceVal.text = [NSString stringWithFormat:@"%@ %@", [Conversions rollupStringForNumber:distance], distanceLabel];
 																	   }
+																	   [self.background setHidden:NO];
 																	   [self.activityType setHidden:NO];
-																	   complete();
 																   }
+																   complete();
 															   }];
 	
 }
@@ -114,7 +137,7 @@ static NSString* const kHikePath = @"hike.png";
 	NSString *parseUrl = url.path;
 	NSArray *fields = [parseUrl componentsSeparatedByString:@"/"];
 	NSString *imageURL = [fields objectAtIndex:[fields count]-1];
-	if([imageURL isEqualToString:kBikePath])
+	if([imageURL isEqualToString:kBikePath] || [imageURL isEqualToString:kRodePath])
 		return kBike;
 	else if([imageURL isEqualToString:kRunPath])
 		return kRun;
