@@ -16,9 +16,6 @@
 @import UASDK;
 
 @interface SettingsViewController ()
-@property (weak, nonatomic) IBOutlet UIView *statsView;
-@property (weak, nonatomic) IBOutlet UIView *aboutMeView;
-@property (weak, nonatomic) IBOutlet UIView *aboutMeSubView;
 
 @property (nonatomic, strong) UINavigationBar* navigationBar;
 
@@ -28,9 +25,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *name;
 @property (weak, nonatomic) IBOutlet UILabel *member;
 @property (weak, nonatomic) IBOutlet UILabel *location;
-@property (weak, nonatomic) IBOutlet UILabel *distanceVal;
-@property (weak, nonatomic) IBOutlet UILabel *caloriesVal;
-@property (weak, nonatomic) IBOutlet UILabel *activitiesVal;
 
 @property (weak, nonatomic) IBOutlet UIButton *logout;
 @property (weak, nonatomic) IBOutlet UIButton *doWorkout;
@@ -38,6 +32,11 @@
 @property (nonatomic, retain) UAUser *user;
 
 @property (nonatomic, assign) BOOL finishedLoading;
+
+@property (weak, nonatomic) IBOutlet UITableView *statsTable;
+
+@property (nonatomic, copy) NSArray	*descriptions;
+@property (nonatomic, copy) NSArray *stats;
 
 @end
 
@@ -56,9 +55,13 @@
 	self.avatar.layer.cornerRadius = self.avatar.frame.size.width /2;
 	self.avatar.layer.masksToBounds = YES;
 
-	self.view.backgroundColor = [UICustomColors backgroundGray];
-	self.statsView.backgroundColor = [UICustomColors backgroundGray];
+	self.descriptions = [self buildDescriptions];
+	self.stats = [self buildStats];
 	
+	self.view.backgroundColor = [UICustomColors backgroundGray];
+	self.statsTable.backgroundColor = [UICustomColors backgroundGray];
+	self.statsTable.rowHeight = 70;
+
 	self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0,[[UIApplication sharedApplication] keyWindow].frame.size.width, 64)];
 	self.navigationItem.title = @"Settings";
 	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"rsz_x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissView)];
@@ -87,26 +90,8 @@
 	self.location.text = [NSString stringWithFormat:@"%@, %@", user.locality, user.region];
 	
 	[self.avatar setImageWithURL:user.userProfilePhoto.largeImageUrl placeholderImage:[UIImage imageNamed:@"anon"]];
-	
-	UAUserStats *lifetimeSum = [SettingsModel sharedInstance].lifetimeSummary;
-	[self setTotalCalories:@([Conversions convertJoulesToCalories:[lifetimeSum.energy doubleValue]])];
-	
-	[self setTotalDistance:lifetimeSum.distance];
-	
-	self.activitiesVal.text = [lifetimeSum.activityCount stringValue];
+	[self.statsTable reloadData];
 }
-
-- (void)setTotalDistance:(NSNumber*)meters
-{
-	NSNumber *distance = @([Conversions distanceInUserUnits:[meters doubleValue] measurement:self.user.displayMeasurementSystem]);
-	self.distanceVal.text = [Conversions rollupStringForNumber:distance];
-}
-
-- (void)setTotalCalories:(NSNumber*)kCal
-{
-	self.caloriesVal.text = [Conversions rollupStringForNumber:kCal];
-}
-
 
 - (IBAction)logout:(id)sender {
 	UIAlertAction *logOutAction;
@@ -169,11 +154,84 @@
 	}
 }
 
+#pragma mark - Table view data source
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+	return 1;
+}
+
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+	return [self.descriptions count];
+}
+
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+	
+	static NSString *CellIdentifier = @"Cell";
+	UITableViewCell *cell = [self.statsTable dequeueReusableCellWithIdentifier:CellIdentifier];
+	if(!cell) {
+		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+	}
+
+	UILabel *stats = [[UILabel alloc] initWithFrame:CGRectMake(7, 0, 115, 70)];
+	UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(125, 0, 220, 70)];
+	
+	cell.backgroundColor = [UICustomColors backgroundGray];
+	stats.font = [UIFont boldSystemFontOfSize:40];
+	stats.textAlignment = NSTextAlignmentCenter;
+	stats.textColor = [UIColor grayColor];
+	stats.adjustsFontSizeToFitWidth = YES;
+	stats.minimumScaleFactor = 5.0/[UIFont labelFontSize];
+	
+	description.font = [UIFont systemFontOfSize:15];
+	description.textColor = [UIColor grayColor];
+	
+	description.text = self.descriptions[indexPath.row];
+	stats.text = self.stats[indexPath.row];
+	
+	[cell addSubview:stats];
+	[cell addSubview:description];
+	
+	return cell;
+}
+
+
 #pragma mark - Memory Management
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
 	NSLog(@"memory warning received");
 	// Dispose of any resources that can be recreated.
+	self.descriptions = nil;
+	self.stats = nil;
+}
+
+- (NSMutableArray *)buildDescriptions
+{
+	return [@[
+			  @"COMPLETED ACTIVITIES",
+			  @"TOTAL CALORIES BURNED",
+			  @"TOTAL MILES",
+			  @"TOTAL WORKOUT DURATION",
+			  ] mutableCopy];
+}
+
+- (NSMutableArray *)buildStats
+{
+	UAUserStats *lifetimeSum = [SettingsModel sharedInstance].lifetimeSummary;
+	NSString *activityCount, *calories, *distance, *duration;
+	
+	activityCount = [lifetimeSum.activityCount stringValue];
+	calories = [Conversions rollupStringForNumber:@([Conversions convertJoulesToCalories:[lifetimeSum.energy doubleValue]])];
+	distance = [Conversions rollupStringForNumber:@([Conversions distanceInUserUnits:[lifetimeSum.distance doubleValue] measurement:self.user.displayMeasurementSystem])];
+	duration = [Conversions secondsToHMS:[lifetimeSum.duration integerValue]];
+	
+	return [@[
+			  activityCount,
+			  calories,
+			  distance,
+			  duration
+			  ] mutableCopy];
 }
 
 @end

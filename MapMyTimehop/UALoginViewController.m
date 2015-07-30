@@ -7,11 +7,13 @@
 
 
 #import "UALoginViewController.h"
+#import "SplashView.h"
 
 @import UASDK;
 
 @interface UALoginViewController () <UIGestureRecognizerDelegate>
 
+@property (nonatomic, retain) SplashView *svc;
 @property (nonatomic, strong) UIWebView *webView;
 
 @end
@@ -22,6 +24,10 @@
 - (void)viewDidLoad
 {
 	[super viewDidLoad];
+	self.svc = [[SplashView alloc] init];
+	self.svc.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
+	[[UIApplication sharedApplication].keyWindow addSubview:self.svc.view];
+
 	
 	//ask someone in graphics to make a mapmytimehop or mapmyhistory logo
 	UIImage *logo = [UIImage imageNamed:@"header_logo"];
@@ -66,6 +72,8 @@
 	forwardSwipe.direction = UISwipeGestureRecognizerDirectionLeft;
 	forwardSwipe.delegate = self;
 	[self.webView addGestureRecognizer:forwardSwipe];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismiss) name:@"dismiss" object:nil];
 }
 
 #pragma mark Gesture Recognizer
@@ -83,6 +91,12 @@
 - (void)forwardSwipe
 {
 	[self.webView goForward];
+}
+
+- (void)dismiss{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.svc.view removeFromSuperview];
+	});
 }
 
 @end

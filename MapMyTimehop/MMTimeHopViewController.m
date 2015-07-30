@@ -18,6 +18,8 @@
 #import "WorkoutCell.h"
 #import "SettingsModel.h"
 
+#import "SplashView.h"
+
 static const NSInteger maxLoad = 4;
 static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 
@@ -44,12 +46,18 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 @property (nonatomic, strong) WorkoutToDisplay *twoYear;
 @property (nonatomic, strong) WorkoutToDisplay *threeYear;
 
+@property (nonatomic, retain) SplashView *svc;
+
 @end
 
 @implementation MMTimeHopViewController
 
 - (void)viewDidLoad {
 	[super viewDidLoad];
+
+	self.svc = [[SplashView alloc] init];
+	self.svc.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
+	[[UIApplication sharedApplication].keyWindow addSubview:self.svc.view];
 
 	UIImage *logo = [UIImage imageNamed:@"header_logo"];
 	logo.isAccessibilityElement = YES;
@@ -59,7 +67,7 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	imView.accessibilityLabel = @"Header Image";
 	self.navigationItem.titleView = imView;
 	imView.frame = CGRectMake(imView.frame.origin.x, imView.frame.origin.y, imView.frame.size.width, imView.frame.size.height);
-
+	imView.contentMode = UIViewContentModeScaleAspectFit;
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsView)];
 
 	self.tableView.rowHeight = [WorkoutCell cellHeight];
@@ -69,9 +77,6 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	self.tableView.separatorColor = [UIColor clearColor];
 	self.tableView.backgroundColor = [UIColor clearColor];
 	self.view.backgroundColor = [UICustomColors backgroundGray];
-	
-	if(![SettingsModel sharedInstance].allWorkoutsLoaded)
-		[LoadingView showModalLoadingViewWithText:@"loading workouts..."];
 	
 	self.refreshControl = [[UIRefreshControl alloc] init];
 	self.refreshControl.backgroundColor = [UICustomColors backgroundGray];
@@ -89,6 +94,8 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTable) name:@"reloadTable" object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggedOut) name:@"loggedOut" object:nil];
+	
+	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismiss) name:@"dismiss" object:nil];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -139,14 +146,18 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 		[self.workouts addObject:self.oneYear];
 		[self.workouts addObject:self.twoYear];
 		[self.workouts addObject:self.threeYear];
-
 		[SettingsModel sharedInstance].allWorkoutsLoaded = YES;
-		[LoadingView dismissModalLoadingView];
 		if(self.pullToRefresh)
 			[self.refreshControl endRefreshing];
 	}
 	
 	[self.tableView reloadData];
+}
+
+- (void)dismiss{
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[self.svc.view removeFromSuperview];
+	});
 }
 
 - (void)updateWorkouts {

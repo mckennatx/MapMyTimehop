@@ -63,7 +63,6 @@ static NSString* const kHikePath = @"hike.png";
 		
 	}];
 	
-	
 	UARouteManager *manager = [UA sharedInstance].routeManager;
 	[manager fetchRouteWithRef:workout.routeRef withDetails:YES response:^(UARoute *object, NSError *error) {
 		if (!error)
@@ -107,9 +106,10 @@ static NSString* const kHikePath = @"hike.png";
 																	   self.activityType.text = [type name];
 
 																	   icon index = [self parseImageURL:[type iconURL]];
+																	   
 																	   [self.background setImage:[self.iconImages objectAtIndex:index]];
 																	   self.background.contentMode = UIViewContentModeScaleAspectFit;
-																	   
+
 																	   if(index == kOther) {
 																		   UAWorkoutAggregate *agg = (UAWorkoutAggregate *)[self.exercise aggregate];
 																		   self.distanceLabel.text = @"Total Duration: ";

@@ -7,6 +7,8 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MMTimeHopViewController.h"
+
 @import UASDK;
 
 @interface WorkoutToDisplay : NSObject

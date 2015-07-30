@@ -11,6 +11,7 @@
 #import "UASDKConfig.h"
 #import "UALoginViewController.h"
 #import "Conversions.h"
+#import "SplashView.h"
 
 @import UASDK;
 
@@ -34,24 +35,19 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 						applicationSecret:[UASDKConfig apiSecret]];
 	
 	self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-	
+
 	if([[UA sharedInstance] authenticatedUserRef] == nil) {
 		UALoginViewController *vc = [[UALoginViewController alloc] init];
 		self.navigationController = [[UINavigationController alloc] initWithRootViewController:vc];
 		self.window.rootViewController = self.navigationController;
-	}
-	
-	else {
+	} else {
 		self.timeHopViewController = [[MMTimeHopViewController alloc] init];
 		self.navigationController = [[UINavigationController alloc] initWithRootViewController:self.timeHopViewController];
 		self.window.rootViewController = self.navigationController;
-		
 	}
-	
 	[self setAppearance];
 	
 	[self.window makeKeyAndVisible];
-	
 	
 	return YES;
 }
@@ -61,7 +57,10 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 	self.window.tintColor = [UIColor whiteColor];
 	self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
-	UIColor *barTint = [UIColor colorWithRed:0.16 green:0.81 blue:0.77 alpha:1.0];
+	//HEXCOLOR: #4C6182
+	UIColor *barTint = [UIColor colorWithRed:0.30 green:0.38 blue:0.51 alpha:1.0];
+	//[UIColor colorWithRed:0.38 green:0.75 blue:0.67 alpha:1.0];
+	//[UIColor colorWithRed:0.16 green:0.81 blue:0.77 alpha:1.0];
 	
 	[[UINavigationBar appearance] setBarTintColor:barTint];
 	[[UIToolbar appearance] setBarStyle:UIBarStyleBlackTranslucent];

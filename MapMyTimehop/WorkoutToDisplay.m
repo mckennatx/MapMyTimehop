@@ -18,6 +18,7 @@
 
 @property (nonatomic, assign) BOOL loadedWorkouts;
 
+
 @property (nonatomic, copy) NSArray *pastWorkoutsList;
 
 
@@ -76,6 +77,7 @@
 	NSInteger day = [components day]-1;
 	NSInteger month = [components month];
 	NSInteger year = [components year];
+	
 	
 	NSDate *compare;
 	NSDateComponents *compareComponenets;
