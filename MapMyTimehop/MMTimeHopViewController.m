@@ -46,8 +46,6 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 @property (nonatomic, strong) WorkoutToDisplay *twoYear;
 @property (nonatomic, strong) WorkoutToDisplay *threeYear;
 
-@property (nonatomic, assign) BOOL adjustParseDate;
-
 @property (nonatomic, retain) SplashView *svc;
 
 @end
@@ -89,9 +87,7 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 							action:@selector(updateWorkouts)
 				  forControlEvents:UIControlEventValueChanged];
 	[self.tableView addSubview:self.refreshControl];
-	
-	self.adjustParseDate = NO;
-	
+		
 	[self fetchUser];
 	
 	self.workouts = [[NSMutableArray alloc] init];
@@ -114,13 +110,13 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	
 	if(![SettingsModel sharedInstance].allWorkoutsLoaded) {
 		NSDate *date = [self previousDate:kOneMonth];
-		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
+		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
 		date = [self previousDate:kOneYear];
-		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
+		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
 		date = [self previousDate:kTwoYear];
-		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
+		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
 		date = [self previousDate:kThreeYear];
-		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
+		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
 		[self.tableView reloadData];
 		
 		[self fetchUser];
@@ -364,27 +360,13 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	NSDate *today = [[NSDate alloc] init];
 	NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
 	NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+	
 	if(diff == kOneMonth)
 		[offsetComponents setMonth:-1]; // setting date to 1 month ago
 	else
 		[offsetComponents setYear:-diff]; // setting year to diff
-	[offsetComponents setDay:+1];
+
 	NSDate *date = [gregorian dateByAddingComponents:offsetComponents toDate:today options:0];
-	
-	//check if end of the month
-	NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
-	
-	NSDateComponents *todayComp = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:today];
-	
-	if((diff == kOneMonth) && ([components month] - [todayComp month] == 0)) {
-		self.adjustParseDate = YES;
-	}
-	else if(([components month] - [todayComp month] != 0)) {
-		self.adjustParseDate = YES;
-	}
-	else {
-		self.adjustParseDate = NO;
-	}
 	
 	return date;
 }
