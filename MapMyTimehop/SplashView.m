@@ -29,9 +29,8 @@
 	[super viewDidLoad];
 	
 	NSArray *imageNames = @[@"pogo_01.png", @"pogo_02.png", @"pogo_03.png", @"pogo_04.png",
-							@"pogo_03.png", @"pogo_02.png", @"pogo_01.png", @"pogo_02.png",
-							@"pogo_03.png", @"pogo_04.png", @"pogo_03.png", @"pogo_02.png",
-							@"pogo_01.png", @"pogo_02.png", @"pogo_03.png", @"pogo_04.png"];
+							@"pogo_03.png", @"pogo_02.png", @"pogo_01.png"];
+	
 	
 	NSMutableArray *images = [[NSMutableArray alloc] init];
 	for (int i = 0; i < imageNames.count; i++) {
@@ -40,14 +39,17 @@
 	
 	self.pogo = [[UIImageView alloc] initWithFrame:CGRectMake(5, 200, 200, 200)];
 	self.position = CGPointMake(5, 200);
+	//[self.pogo setImage:[UIImage imageNamed:@"pogo_01.png"]];
 	self.pogo.animationImages = images;
-	self.pogo.animationDuration = 4.0f;
+	self.pogo.animationDuration = 4.5f;
 	self.pogo.contentMode = UIViewContentModeScaleAspectFit;
 	
 	self.header = [[UIImageView alloc] initWithFrame:CGRectMake(self.position.x+80, 400, 320, 200)];
 	[self.header setImage:([UIImage imageNamed:@"header"])];
 	self.header.contentMode = UIViewContentModeScaleAspectFit;
 	self.displayHeader = YES;
+	
+	[self.view addSubview:self.pogo];
 	
 	dispatch_async(dispatch_get_main_queue(), ^{
 		[self.view addSubview:self.pogo];
@@ -78,9 +80,9 @@
 	
 	requestBlock = ^{
 		dispatch_async(dispatch_get_main_queue(), ^{
-			[UIView animateWithDuration:0.35
-								  delay:0.05
-								options:UIViewAnimationOptionTransitionNone
+			[UIView animateWithDuration:.35
+								  delay:0.00
+								options:UIViewAnimationOptionCurveEaseIn
 							 animations:^{
 								 [self.pogo setFrame:CGRectMake(self.position.x, self.position.y, self.pogo.frame.size.width, self.pogo.frame.size.height)];
 							 }
@@ -92,11 +94,12 @@
 										 [self.view addSubview:self.header];
 										 self.displayHeader = NO;
 									 }
+									 
 									 //every time it hits "bottom", leave a print
 									 UIImageView *pogoPrint = [[UIImageView alloc] initWithFrame:CGRectMake(self.position.x+48, 440, 10, 10)];
 									 [pogoPrint setImage:[UIImage imageNamed:@"dot"]];
 									 pogoPrint.contentMode = UIViewContentModeScaleAspectFit;
-									 [self.view addSubview:pogoPrint];
+									 [self performSelector:@selector(pogoPrint:) withObject:pogoPrint afterDelay:.1];
 								 }
 								 else {
 									 self.position = CGPointMake(self.position.x+10, 300);
@@ -108,6 +111,10 @@
 	};
 	
 	requestBlock();
+}
+
+- (void)pogoPrint:(UIImageView *)pogoPrint {
+	[self.view addSubview:pogoPrint];
 }
 
 - (void)didReceiveMemoryWarning {

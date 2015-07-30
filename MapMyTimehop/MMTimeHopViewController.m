@@ -46,6 +46,8 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 @property (nonatomic, strong) WorkoutToDisplay *twoYear;
 @property (nonatomic, strong) WorkoutToDisplay *threeYear;
 
+@property (nonatomic, assign) BOOL adjustParseDate;
+
 @property (nonatomic, retain) SplashView *svc;
 
 @end
@@ -59,17 +61,18 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	self.svc.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
 	[[UIApplication sharedApplication].keyWindow addSubview:self.svc.view];
 
-	UIImage *logo = [UIImage imageNamed:@"header_logo"];
-	logo.isAccessibilityElement = YES;
-	logo.accessibilityLabel = @"MapMyTimeHop";
-	UIImageView *imView = [[UIImageView alloc] initWithImage:logo];
-	imView.isAccessibilityElement = YES;
-	imView.accessibilityLabel = @"Header Image";
-	self.navigationItem.titleView = imView;
-	imView.frame = CGRectMake(imView.frame.origin.x, imView.frame.origin.y, imView.frame.size.width, imView.frame.size.height);
-	imView.contentMode = UIViewContentModeScaleAspectFit;
+//	UIImage *logo = [UIImage imageNamed:@"headerCopy"];
+//	logo.isAccessibilityElement = YES;
+//	logo.accessibilityLabel = @"MapMyTimeHop";
+//	UIImageView *imView = [[UIImageView alloc] initWithImage:logo];
+//	imView.isAccessibilityElement = YES;
+//	imView.accessibilityLabel = @"Header Image";
+//	self.navigationItem.titleView = imView;
+//	imView.frame = CGRectMake(imView.frame.origin.x, imView.frame.origin.y, imView.frame.size.width, imView.frame.size.height);
+//	imView.contentMode = UIViewContentModeScaleAspectFit;
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsView)];
 
+	self.title = @"mapmytimehop";
 	self.tableView.rowHeight = [WorkoutCell cellHeight];
 	self.tableHeaders = [self buildTableHeaders];
 	self.sectionColors = [self buildSectionColors];
@@ -86,6 +89,8 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 							action:@selector(updateWorkouts)
 				  forControlEvents:UIControlEventValueChanged];
 	[self.tableView addSubview:self.refreshControl];
+	
+	self.adjustParseDate = NO;
 	
 	[self fetchUser];
 	
@@ -109,13 +114,13 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	
 	if(![SettingsModel sharedInstance].allWorkoutsLoaded) {
 		NSDate *date = [self previousDate:kOneMonth];
-		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		self.oneMonth = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
 		date = [self previousDate:kOneYear];
-		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		self.oneYear = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
 		date = [self previousDate:kTwoYear];
-		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		self.twoYear = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
 		date = [self previousDate:kThreeYear];
-		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date];
+		self.threeYear = [[WorkoutToDisplay alloc] initWithFilterDate:date adjust:self.adjustParseDate];
 		[self.tableView reloadData];
 		
 		[self fetchUser];
@@ -366,6 +371,21 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	[offsetComponents setDay:+1];
 	NSDate *date = [gregorian dateByAddingComponents:offsetComponents toDate:today options:0];
 	
+	//check if end of the month
+	NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:date];
+	
+	NSDateComponents *todayComp = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:today];
+	
+	if((diff == kOneMonth) && ([components month] - [todayComp month] == 0)) {
+		self.adjustParseDate = YES;
+	}
+	else if(([components month] - [todayComp month] != 0)) {
+		self.adjustParseDate = YES;
+	}
+	else {
+		self.adjustParseDate = NO;
+	}
+	
 	return date;
 }
 
@@ -416,7 +436,6 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 			requestBlock();
 		}
 		else {
-			NSLog(@"no more workouts");
 			complete();
 		}
 	};

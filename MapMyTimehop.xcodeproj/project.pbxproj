@@ -8,8 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		0C21ED5F1FADF587DC2A58EA /* libPods.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D1936894A808F22C11936775 /* libPods.a */; };
+		9E315EB71B6AC2D4002B3849 /* header_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E315EB61B6AC2D4002B3849 /* header_logo.png */; };
+		9E315EB91B6AC320002B3849 /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E315EB81B6AC320002B3849 /* x.png */; };
+		9E315EBB1B6AC416002B3849 /* UASDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E315EBA1B6AC416002B3849 /* UASDK.framework */; };
+		9E315EBE1B6AC90F002B3849 /* headerCopy.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E315EBD1B6AC90F002B3849 /* headerCopy.png */; };
 		9E95AB4A1B62B6910008C77C /* Schemas.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB491B62B6910008C77C /* Schemas.bundle */; };
-		9E95AB4C1B62B99F0008C77C /* UASDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E95AB4B1B62B99F0008C77C /* UASDK.framework */; };
 		9E95AB561B62CF730008C77C /* WorkoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E95AB541B62CF730008C77C /* WorkoutCell.m */; };
 		9E95AB571B62CF730008C77C /* WorkoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB551B62CF730008C77C /* WorkoutCell.xib */; };
 		9E95AB5E1B64C5D70008C77C /* noactivity@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB5D1B64C5D70008C77C /* noactivity@2x.png */; };
@@ -26,16 +29,10 @@
 		9E9ED1721B6927D3000F8CFA /* SplashView.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E9ED1711B6927D3000F8CFA /* SplashView.m */; };
 		9E9ED1761B692EBE000F8CFA /* SplashView.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1751B692EBE000F8CFA /* SplashView.xib */; };
 		9E9ED19C1B6974FB000F8CFA /* dot.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED19B1B6974FB000F8CFA /* dot.png */; };
-		9E9ED19E1B698056000F8CFA /* mapmytimehop.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED19D1B698056000F8CFA /* mapmytimehop.png */; };
-		9E9ED1A21B698849000F8CFA /* mmth.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1A11B698849000F8CFA /* mmth.png */; };
-		9E9ED1A41B69949E000F8CFA /* circleIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1A31B69949E000F8CFA /* circleIcon.png */; };
-		9E9ED1A61B699AB8000F8CFA /* mmthHeader.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1A51B699AB8000F8CFA /* mmthHeader.png */; };
 		9E9ED1AF1B69D755000F8CFA /* pogo_01.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1AB1B69D755000F8CFA /* pogo_01.png */; };
 		9E9ED1B01B69D755000F8CFA /* pogo_02.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1AC1B69D755000F8CFA /* pogo_02.png */; };
 		9E9ED1B11B69D755000F8CFA /* pogo_03.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1AD1B69D755000F8CFA /* pogo_03.png */; };
 		9E9ED1B21B69D755000F8CFA /* pogo_04.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1AE1B69D755000F8CFA /* pogo_04.png */; };
-		9E9ED1B51B69D925000F8CFA /* pogo_021.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1B31B69D925000F8CFA /* pogo_021.png */; };
-		9E9ED1B61B69D925000F8CFA /* pogo_031.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1B41B69D925000F8CFA /* pogo_031.png */; };
 		9E9ED1CC1B6A8085000F8CFA /* header.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E9ED1CB1B6A8085000F8CFA /* header.png */; };
 		9EA3E5AF1B62B13200C56D71 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5AE1B62B13200C56D71 /* main.m */; };
 		9EA3E5B21B62B13200C56D71 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5B11B62B13200C56D71 /* AppDelegate.m */; };
@@ -48,9 +45,7 @@
 		9EA3E5DB1B62B42000C56D71 /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9EA3E5DA1B62B42000C56D71 /* MobileCoreServices.framework */; };
 		9EA3E5E81B62B49800C56D71 /* NotificationModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5DF1B62B49800C56D71 /* NotificationModel.m */; };
 		9EA3E5E91B62B49800C56D71 /* WorkoutToDisplay.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5E11B62B49800C56D71 /* WorkoutToDisplay.m */; };
-		9EA3E5EB1B62B49800C56D71 /* rsz_x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EA3E5E31B62B49800C56D71 /* rsz_x.png */; };
 		9EA3E5EC1B62B49800C56D71 /* gear.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EA3E5E41B62B49800C56D71 /* gear.png */; };
-		9EA3E5ED1B62B49800C56D71 /* header_logo@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EA3E5E51B62B49800C56D71 /* header_logo@2x.png */; };
 		9EA3E5EE1B62B49800C56D71 /* anon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EA3E5E61B62B49800C56D71 /* anon@2x.png */; };
 		9EA3E5EF1B62B49800C56D71 /* anon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9EA3E5E71B62B49800C56D71 /* anon@3x.png */; };
 		9EA3E5FF1B62B4D800C56D71 /* LocalNotificationController.m in Sources */ = {isa = PBXBuildFile; fileRef = 9EA3E5F41B62B4D800C56D71 /* LocalNotificationController.m */; };
@@ -79,6 +74,11 @@
 /* Begin PBXFileReference section */
 		292483E2F66F1F6FFA0C4641 /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
 		2E918E457026D0F1F4925A32 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
+		9E315EB61B6AC2D4002B3849 /* header_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header_logo.png; sourceTree = "<group>"; };
+		9E315EB81B6AC320002B3849 /* x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = x.png; sourceTree = "<group>"; };
+		9E315EBA1B6AC416002B3849 /* UASDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UASDK.framework; path = "../../../../Applications/UASDK-iOS-2015-01-16-2.0.28ca167/UASDK.framework"; sourceTree = "<group>"; };
+		9E315EBC1B6AC82E002B3849 /* header_logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = header_logo2.png; path = "../../../Documents/MMTH-Icons/mmth-png/header_logo2.png"; sourceTree = "<group>"; };
+		9E315EBD1B6AC90F002B3849 /* headerCopy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headerCopy.png; sourceTree = "<group>"; };
 		9E95AB491B62B6910008C77C /* Schemas.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Schemas.bundle; sourceTree = "<group>"; };
 		9E95AB4B1B62B99F0008C77C /* UASDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UASDK.framework; path = "../../Downloads/UASDK-iOS-2015-01-16-2.0.28ca167/UASDK.framework"; sourceTree = "<group>"; };
 		9E95AB531B62CF730008C77C /* WorkoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkoutCell.h; sourceTree = "<group>"; };
@@ -101,16 +101,10 @@
 		9E9ED1711B6927D3000F8CFA /* SplashView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SplashView.m; sourceTree = "<group>"; };
 		9E9ED1751B692EBE000F8CFA /* SplashView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = SplashView.xib; sourceTree = "<group>"; };
 		9E9ED19B1B6974FB000F8CFA /* dot.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = dot.png; sourceTree = "<group>"; };
-		9E9ED19D1B698056000F8CFA /* mapmytimehop.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mapmytimehop.png; sourceTree = "<group>"; };
-		9E9ED1A11B698849000F8CFA /* mmth.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mmth.png; sourceTree = "<group>"; };
-		9E9ED1A31B69949E000F8CFA /* circleIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = circleIcon.png; sourceTree = "<group>"; };
-		9E9ED1A51B699AB8000F8CFA /* mmthHeader.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = mmthHeader.png; sourceTree = "<group>"; };
 		9E9ED1AB1B69D755000F8CFA /* pogo_01.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pogo_01.png; sourceTree = "<group>"; };
 		9E9ED1AC1B69D755000F8CFA /* pogo_02.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pogo_02.png; sourceTree = "<group>"; };
 		9E9ED1AD1B69D755000F8CFA /* pogo_03.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pogo_03.png; sourceTree = "<group>"; };
 		9E9ED1AE1B69D755000F8CFA /* pogo_04.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pogo_04.png; sourceTree = "<group>"; };
-		9E9ED1B31B69D925000F8CFA /* pogo_021.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pogo_021.png; sourceTree = "<group>"; };
-		9E9ED1B41B69D925000F8CFA /* pogo_031.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pogo_031.png; sourceTree = "<group>"; };
 		9E9ED1CB1B6A8085000F8CFA /* header.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = header.png; sourceTree = "<group>"; };
 		9EA3E5A91B62B13200C56D71 /* MapMyTimeHop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MapMyTimeHop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9EA3E5AD1B62B13200C56D71 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -131,9 +125,7 @@
 		9EA3E5DF1B62B49800C56D71 /* NotificationModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NotificationModel.m; sourceTree = "<group>"; };
 		9EA3E5E01B62B49800C56D71 /* WorkoutToDisplay.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkoutToDisplay.h; sourceTree = "<group>"; };
 		9EA3E5E11B62B49800C56D71 /* WorkoutToDisplay.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = WorkoutToDisplay.m; sourceTree = "<group>"; };
-		9EA3E5E31B62B49800C56D71 /* rsz_x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rsz_x.png; sourceTree = "<group>"; };
 		9EA3E5E41B62B49800C56D71 /* gear.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = gear.png; sourceTree = "<group>"; };
-		9EA3E5E51B62B49800C56D71 /* header_logo@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "header_logo@2x.png"; sourceTree = "<group>"; };
 		9EA3E5E61B62B49800C56D71 /* anon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anon@2x.png"; sourceTree = "<group>"; };
 		9EA3E5E71B62B49800C56D71 /* anon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "anon@3x.png"; sourceTree = "<group>"; };
 		9EA3E5F31B62B4D800C56D71 /* LocalNotificationController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LocalNotificationController.h; sourceTree = "<group>"; };
@@ -164,7 +156,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9E95AB4C1B62B99F0008C77C /* UASDK.framework in Frameworks */,
+				9E315EBB1B6AC416002B3849 /* UASDK.framework in Frameworks */,
 				9EA3E5DB1B62B42000C56D71 /* MobileCoreServices.framework in Frameworks */,
 				9EA3E5D91B62B41A00C56D71 /* SystemConfiguration.framework in Frameworks */,
 				9EA3E5D71B62B41300C56D71 /* libsqlite3.dylib in Frameworks */,
@@ -259,17 +251,11 @@
 		9EA3E5F11B62B4B400C56D71 /* Images */ = {
 			isa = PBXGroup;
 			children = (
-				9E9ED1B31B69D925000F8CFA /* pogo_021.png */,
-				9E9ED1B41B69D925000F8CFA /* pogo_031.png */,
 				9E9ED1AB1B69D755000F8CFA /* pogo_01.png */,
 				9E9ED1AC1B69D755000F8CFA /* pogo_02.png */,
 				9E9ED1AD1B69D755000F8CFA /* pogo_03.png */,
 				9E9ED1AE1B69D755000F8CFA /* pogo_04.png */,
 				9E9ED19B1B6974FB000F8CFA /* dot.png */,
-				9E9ED1A51B699AB8000F8CFA /* mmthHeader.png */,
-				9E9ED1A11B698849000F8CFA /* mmth.png */,
-				9E9ED19D1B698056000F8CFA /* mapmytimehop.png */,
-				9E9ED1A31B69949E000F8CFA /* circleIcon.png */,
 				9E9ED1531B66B627000F8CFA /* icons.png */,
 				9E95AB611B6578630008C77C /* bike.png */,
 				9E95AB621B6578630008C77C /* dog.png */,
@@ -278,11 +264,13 @@
 				9E95AB651B6578630008C77C /* run.png */,
 				9E95AB661B6578630008C77C /* walk.png */,
 				9E95AB5D1B64C5D70008C77C /* noactivity@2x.png */,
+				9E315EBD1B6AC90F002B3849 /* headerCopy.png */,
+				9E315EBC1B6AC82E002B3849 /* header_logo2.png */,
 				9E9ED1691B6924E5000F8CFA /* splash.png */,
-				9EA3E5E31B62B49800C56D71 /* rsz_x.png */,
+				9E315EB81B6AC320002B3849 /* x.png */,
+				9E315EB61B6AC2D4002B3849 /* header_logo.png */,
 				9EA3E5E41B62B49800C56D71 /* gear.png */,
 				9E9ED1CB1B6A8085000F8CFA /* header.png */,
-				9EA3E5E51B62B49800C56D71 /* header_logo@2x.png */,
 				9EA3E5E61B62B49800C56D71 /* anon@2x.png */,
 				9EA3E5E71B62B49800C56D71 /* anon@3x.png */,
 			);
@@ -354,6 +342,7 @@
 		F007C8E3D4AAA7E24D368C4D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				9E315EBA1B6AC416002B3849 /* UASDK.framework */,
 				9E95AB4B1B62B99F0008C77C /* UASDK.framework */,
 				9EA3E5DA1B62B42000C56D71 /* MobileCoreServices.framework */,
 				9EA3E5D81B62B41A00C56D71 /* SystemConfiguration.framework */,
@@ -448,36 +437,31 @@
 			buildActionMask = 2147483647;
 			files = (
 				9E95AB5E1B64C5D70008C77C /* noactivity@2x.png in Resources */,
+				9E315EB71B6AC2D4002B3849 /* header_logo.png in Resources */,
 				9E9ED1AF1B69D755000F8CFA /* pogo_01.png in Resources */,
 				9E95AB4A1B62B6910008C77C /* Schemas.bundle in Resources */,
 				9E95AB6A1B6578630008C77C /* hike.png in Resources */,
-				9EA3E5ED1B62B49800C56D71 /* header_logo@2x.png in Resources */,
-				9E9ED1A41B69949E000F8CFA /* circleIcon.png in Resources */,
 				9E9ED1CC1B6A8085000F8CFA /* header.png in Resources */,
-				9E9ED19E1B698056000F8CFA /* mapmytimehop.png in Resources */,
 				9EA3E5EF1B62B49800C56D71 /* anon@3x.png in Resources */,
 				9E95AB681B6578630008C77C /* dog.png in Resources */,
 				9E95AB6C1B6578630008C77C /* walk.png in Resources */,
-				9E9ED1A61B699AB8000F8CFA /* mmthHeader.png in Resources */,
-				9EA3E5EB1B62B49800C56D71 /* rsz_x.png in Resources */,
 				9E9ED16A1B6924E5000F8CFA /* splash.png in Resources */,
 				9E9ED1B01B69D755000F8CFA /* pogo_02.png in Resources */,
 				9EA3E5EC1B62B49800C56D71 /* gear.png in Resources */,
 				9EA3E5EE1B62B49800C56D71 /* anon@2x.png in Resources */,
 				9E9ED19C1B6974FB000F8CFA /* dot.png in Resources */,
 				9EA3E6051B62B4D800C56D71 /* SettingsViewController.xib in Resources */,
+				9E315EB91B6AC320002B3849 /* x.png in Resources */,
 				9E9ED1761B692EBE000F8CFA /* SplashView.xib in Resources */,
 				9E95AB691B6578630008C77C /* fitness.png in Resources */,
 				9E9ED1B21B69D755000F8CFA /* pogo_04.png in Resources */,
 				9EA3E5BD1B62B13200C56D71 /* LaunchScreen.xib in Resources */,
 				9EA3E5BA1B62B13200C56D71 /* Images.xcassets in Resources */,
+				9E315EBE1B6AC90F002B3849 /* headerCopy.png in Resources */,
 				9E9ED1B11B69D755000F8CFA /* pogo_03.png in Resources */,
-				9E9ED1A21B698849000F8CFA /* mmth.png in Resources */,
 				9E95AB671B6578630008C77C /* bike.png in Resources */,
 				9E9ED1541B66B627000F8CFA /* icons.png in Resources */,
-				9E9ED1B61B69D925000F8CFA /* pogo_031.png in Resources */,
 				9E95AB6B1B6578630008C77C /* run.png in Resources */,
-				9E9ED1B51B69D925000F8CFA /* pogo_021.png in Resources */,
 				9EA3E6021B62B4D800C56D71 /* MMTimeHopViewController.xib in Resources */,
 				9E95AB571B62CF730008C77C /* WorkoutCell.xib in Resources */,
 			);
@@ -670,6 +654,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/lmckenna/Downloads/UASDK-iOS-2015-01-16-2.0.28ca167",
+					"$(SYSTEM_APPS_DIR)/UASDK-iOS-2015-01-16-2.0.28ca167",
 				);
 				INFOPLIST_FILE = MapMyTimeHop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -685,6 +670,7 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"/Users/lmckenna/Downloads/UASDK-iOS-2015-01-16-2.0.28ca167",
+					"$(SYSTEM_APPS_DIR)/UASDK-iOS-2015-01-16-2.0.28ca167",
 				);
 				INFOPLIST_FILE = MapMyTimeHop/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

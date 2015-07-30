@@ -64,7 +64,7 @@
 
 	self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0,[[UIApplication sharedApplication] keyWindow].frame.size.width, 64)];
 	self.navigationItem.title = @"Settings";
-	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"rsz_x.png"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissView)];
+	self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"x"] style:UIBarButtonItemStylePlain target:self action:@selector(dismissView)];
 	[self.view addSubview:_navigationBar];
 	[self.navigationBar pushNavigationItem:self.navigationItem animated:NO];
 	[self fetchUser];

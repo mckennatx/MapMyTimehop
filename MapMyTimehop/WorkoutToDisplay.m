@@ -18,6 +18,7 @@
 
 @property (nonatomic, assign) BOOL loadedWorkouts;
 
+@property (nonatomic, assign) BOOL adjustParseDate;
 
 @property (nonatomic, copy) NSArray *pastWorkoutsList;
 
@@ -26,13 +27,14 @@
 
 @implementation WorkoutToDisplay
 
-- (instancetype)initWithFilterDate:(NSDate *)filter {
+- (instancetype)initWithFilterDate:(NSDate *)filter adjust:(BOOL)adjustDate{
 	self = [super init];
 	if(self) {
 		self.filterDate = filter;
 		self.hasPastWorkoutFromTodaysDate = NO;
 		self.pastWorkoutsFromDate = [[NSMutableArray alloc] init];
 		self.pastWorkoutsList = [[NSMutableArray alloc] init];
+		self.adjustParseDate = adjustDate;
 		[self workoutsToDisplayWithBlock:^{
 			self.loadedWorkouts = YES;
 			[self parseWorkouts];
@@ -78,10 +80,16 @@
 	NSInteger month = [components month];
 	NSInteger year = [components year];
 	
-	
+	NSDate *today = [[NSDate alloc] init];
+	NSDateComponents *todayComp = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:today];
+
 	NSDate *compare;
 	NSDateComponents *compareComponenets;
-	
+	if(self.adjustParseDate) {
+		month = [todayComp month]-1;
+		day =[todayComp day];
+		year = [todayComp year];
+	}
 	for(UAWorkout *workout in self.pastWorkoutsList) {
 		compare = workout.startDatetime;
 		compareComponenets = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:compare];

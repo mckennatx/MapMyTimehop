@@ -16,7 +16,7 @@
 @property (nonatomic, assign) BOOL hasPastWorkoutFromTodaysDate;
 @property (nonatomic, retain) NSMutableArray *pastWorkoutsFromDate;
 
-- (instancetype)initWithFilterDate:(NSDate *)filter;
+- (instancetype)initWithFilterDate:(NSDate *)filter adjust:(BOOL)adjustDate;
 - (instancetype)refresh;
 - (CGFloat)totalCalories;
 
