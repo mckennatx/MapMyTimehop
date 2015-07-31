@@ -79,6 +79,14 @@
 
 - (void)parseWorkouts {
 	NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:_filterDate];
+	NSDate *today = [[NSDate alloc] init];
+	NSDateComponents *todayComps = [[NSCalendar currentCalendar] components:NSCalendarUnitDay fromDate:today];
+	
+	//takes into account months with 30 days and 31 days
+	if([todayComps day] % [components day] != 0) {
+		return;
+	}
+	
 	NSInteger day = [components day];
 	NSInteger month = [components month];
 	NSInteger year = [components year];
