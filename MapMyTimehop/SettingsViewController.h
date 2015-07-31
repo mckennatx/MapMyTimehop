@@ -8,6 +8,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface SettingsViewController : UIViewController<UITableViewDataSource, UITableViewDataSource>
+@interface SettingsViewController : UIViewController<UITableViewDataSource, UITableViewDataSource, UICollectionViewDataSource,UICollectionViewDelegateFlowLayout>
 
 @end

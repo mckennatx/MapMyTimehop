@@ -13,6 +13,8 @@
 #import "UICustomColors.h"
 #import "SettingsModel.h"
 #import "LifetimeStatsCell.h"
+#import "LifeTimeCollectionCell.h"
+#import "SelectedStatCell.h"
 
 @import UASDK;
 
@@ -34,11 +36,15 @@
 
 @property (nonatomic, assign) BOOL finishedLoading;
 
+@property (strong, nonatomic) IBOutlet UICollectionView *statsCollection;
 @property (weak, nonatomic) IBOutlet UITableView *statsTable;
 
 @property (nonatomic, copy) NSArray	*descriptions;
 @property (nonatomic, copy) NSArray *stats;
 @property (nonatomic, copy) NSArray *images;
+@property (nonatomic, copy) NSArray *selectedCellTitle;
+
+@property (nonatomic, assign) BOOL dontHighlight;
 
 @end
 
@@ -60,9 +66,21 @@
 	self.descriptions = [self buildDescriptions];
 	self.stats = [self buildStats];
 	self.images = [self buildImages];
+	self.selectedCellTitle = [self buildTitles];
+	
+	[self.statsCollection registerClass:[LifeTimeCollectionCell class] forCellWithReuseIdentifier:@"CollectionCell"];
+	
+	UINib *nib = [UINib nibWithNibName:@"LifeTimeCollectionCell" bundle:nil];
+	[self.statsCollection registerNib:nib
+	   forCellWithReuseIdentifier:@"CollectionCell"];
+	
+	nib = [UINib nibWithNibName:@"SelectedStatCell" bundle:nil];
+	[self.statsCollection registerNib:nib
+		   forCellWithReuseIdentifier:@"SelectedCell"];
 	
 	self.view.backgroundColor = [UICustomColors backgroundGray];
 	self.statsTable.backgroundColor = [UICustomColors backgroundGray];
+	self.statsCollection.backgroundColor = [UICustomColors backgroundGray];
 	self.statsTable.rowHeight = [LifetimeStatsCell rowHeight];
 
 	self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0,[[UIApplication sharedApplication] keyWindow].frame.size.width, 64)];
@@ -157,6 +175,96 @@
 	}
 }
 
+#pragma mark - Collection view data source
+
+
+- (NSInteger)collectionView:(UICollectionView *)collectionView numberOfItemsInSection:(NSInteger)section
+{
+	return [self.stats count]/2;
+}
+
+- (NSInteger)numberOfSectionsInCollectionView: (UICollectionView *)collectionView {
+	return [self.stats count]/2;
+}
+
+- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	return CGSizeMake(160, 160);
+}
+
+// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
+- (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
+{
+	static NSString *CellIdentifier = @"CollectionCell";
+
+	LifeTimeCollectionCell *cell= (LifeTimeCollectionCell *)[self.statsCollection dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+	
+	int index = 0;
+	if(indexPath.section == 0 && indexPath.row == 1) {
+		index = 1;
+	}else if(indexPath.section == 1 && indexPath.row == 0) {
+		index = 2;
+	}else if(indexPath.section == 1 && indexPath.row == 1) {
+		index = 3;
+	}
+	[cell.image setImage:self.images[index]];
+	[cell.stats setText:self.stats[index]];
+	[cell.title setText:self.descriptions[index]];
+	cell.index = index;
+	
+	return cell;
+}
+
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
+	static NSString *CellIdentifier = @"SelectedCell";
+	
+	SelectedStatCell *statCell= [self.statsCollection dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+	
+	LifeTimeCollectionCell* cell = (LifeTimeCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
+
+	statCell.title.text = self.selectedCellTitle[cell.index];
+	self.dontHighlight = YES;
+	[UIView animateWithDuration:1.0
+						  delay:0
+						options:(UIViewAnimationOptionAllowUserInteraction)
+					 animations:^{
+							 [UIView transitionFromView:cell.contentView
+												 toView:statCell.contentView
+											   duration:.5
+												options:UIViewAnimationOptionTransitionFlipFromLeft
+											 completion:^(BOOL finished){
+											 }];
+					 }
+	 
+					 completion:^(BOOL finished){
+						 double delayInSeconds = 2.0;
+						 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+						 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+							 [self reset:cell dismiss:statCell];
+						 });
+						 
+					 }];
+	}
+
+- (void)reset:(UICollectionViewCell *)cell dismiss:(UICollectionViewCell *)dismissCell {
+		[UIView transitionFromView:dismissCell.contentView
+							toView:cell.contentView
+						  duration:.5
+						   options:UIViewAnimationOptionTransitionFlipFromLeft
+						completion:^(BOOL finished){
+							self.dontHighlight = NO;
+						}];
+}
+
+- (BOOL)collectionView:(UICollectionView *)collectionView shouldHighlightItemAtIndexPath:(NSIndexPath *)indexPath {
+	if(self.dontHighlight) {
+		return false;
+	}
+	return true;
+}
+
+
+
 #pragma mark - Table view data source
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
@@ -173,6 +281,7 @@
 	
 	static NSString *CellIdentifier = @"Cell";
 	LifetimeStatsCell *cell = [self.statsTable dequeueReusableCellWithIdentifier:CellIdentifier];
+	
 	if(!cell) {
 		NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"LifetimeStatsCell" owner:self options:nil];
 		cell = topLevelObjects[0];
@@ -182,26 +291,6 @@
 	cell.title.text = self.descriptions[indexPath.row];
 	cell.value.text = self.stats[indexPath.row];
 	[cell.image setImage:self.images[indexPath.row]];
-
-
-//	UILabel *stats = [[UILabel alloc] initWithFrame:CGRectMake(7, 0, 115, 70)];
-//	UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(125, 0, 220, 70)];
-//	
-//	cell.backgroundColor = [UICustomColors backgroundGray];
-//	stats.font = [UIFont boldSystemFontOfSize:40];
-//	stats.textAlignment = NSTextAlignmentCenter;
-//	stats.textColor = [UIColor grayColor];
-//	stats.adjustsFontSizeToFitWidth = YES;
-//	stats.minimumScaleFactor = 5.0/[UIFont labelFontSize];
-//	
-//	description.font = [UIFont systemFontOfSize:15];
-//	description.textColor = [UIColor grayColor];
-//	
-//	description.text = self.descriptions[indexPath.row];
-//	stats.text = self.stats[indexPath.row];
-//	
-//	[cell addSubview:stats];
-//	[cell addSubview:description];
 	
 	return cell;
 }
@@ -219,10 +308,20 @@
 - (NSMutableArray *)buildDescriptions
 {
 	return [@[
-			  @"COMPLETED ACTIVITIES",
-			  @"TOTAL CALORIES BURNED",
-			  @"TOTAL MILES",
-			  @"TOTAL WORKOUT DURATION",
+			  @"completed activities",
+			  @"total calories burned",
+			  @"total miles",
+			  @"total workout duration",
+			  ] mutableCopy];
+}
+
+- (NSMutableArray *)buildTitles
+{
+	return [@[
+			  @"activities",
+			  @"calories",
+			  @"distance",
+			  @"duration",
 			  ] mutableCopy];
 }
 
