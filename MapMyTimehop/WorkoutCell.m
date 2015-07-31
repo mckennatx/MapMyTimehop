@@ -34,11 +34,12 @@ static NSString* const kHikePath = @"hike.png";
 	self.background.layer.masksToBounds = YES;
 	
 	[self.workoutName setFont:[UIFont boldSystemFontOfSize:18]];
+	self.workoutName.textColor = [UIColor colorWithRed:0.12 green:0.15 blue:0.20 alpha:1.0];
 	
-	[self.activityType setFont:[UIFont systemFontOfSize:12]];
-	[self.distanceVal setFont:[UIFont systemFontOfSize:12]];
-	[self.distanceLabel setFont:[UIFont boldSystemFontOfSize:12]];
-	[self.activityLabel setFont:[UIFont boldSystemFontOfSize:12]];
+	[self.activityType setFont:[UIFont italicSystemFontOfSize:12]];
+	[self.distanceVal setFont:[UIFont italicSystemFontOfSize:12]];
+	[self.distanceLabel setFont:[UIFont systemFontOfSize:12]];
+	[self.activityLabel setFont:[UIFont systemFontOfSize:12]];
 
 	self.iconImages = [self setIconImageArray];
 	
@@ -62,20 +63,23 @@ static NSString* const kHikePath = @"hike.png";
 	[self activitiesToDisplayWithBlock: ^ {
 		
 	}];
-//
-//	UARouteManager *manager = [UA sharedInstance].routeManager;
-//	[manager fetchRouteWithRef:workout.routeRef withDetails:YES response:^(UARoute *object, NSError *error) {
-//		if (!error)
-//		{
-//			UARoute *route = object;
-//			if (route)
-//			{
-//				NSURL *url = [route thumbnailUrlWithWidth:300 height:100];
-//				NSLog(@"%@", url);
-//				return;
-//			}
-//		}
-//	}];
+	UARouteManager *manager = [UA sharedInstance].routeManager;
+	[manager fetchRouteWithRef:workout.routeRef withDetails:YES response:^(UARoute *object, NSError *error) {
+		if (!error)
+		{
+			UARoute *route = object;
+			if (route)
+			{
+				NSURL *url = [route thumbnailUrlWithWidth:300 height:100];
+//				UIImageView *routeMap = [[UIImageView alloc] initWithFrame:CGRectMake(5, 200, 300, 100)];
+//				[routeMap setImageWithURL:url];
+//				routeMap.contentMode = UIViewContentModeScaleAspectFit;
+//				[self addSubview:routeMap];
+				NSLog(@"%@", url);
+				return;
+			}
+		}
+	}];
 	
 	self.workoutName.text = [workout workoutName];
 	

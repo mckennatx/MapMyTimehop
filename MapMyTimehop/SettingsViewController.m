@@ -12,6 +12,7 @@
 #import "Conversions.h"
 #import "UICustomColors.h"
 #import "SettingsModel.h"
+#import "LifetimeStatsCell.h"
 
 @import UASDK;
 
@@ -37,6 +38,7 @@
 
 @property (nonatomic, copy) NSArray	*descriptions;
 @property (nonatomic, copy) NSArray *stats;
+@property (nonatomic, copy) NSArray *images;
 
 @end
 
@@ -57,10 +59,11 @@
 
 	self.descriptions = [self buildDescriptions];
 	self.stats = [self buildStats];
+	self.images = [self buildImages];
 	
 	self.view.backgroundColor = [UICustomColors backgroundGray];
 	self.statsTable.backgroundColor = [UICustomColors backgroundGray];
-	self.statsTable.rowHeight = 70;
+	self.statsTable.rowHeight = [LifetimeStatsCell rowHeight];
 
 	self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0,[[UIApplication sharedApplication] keyWindow].frame.size.width, 64)];
 	self.navigationItem.title = @"Settings";
@@ -169,29 +172,36 @@
 {
 	
 	static NSString *CellIdentifier = @"Cell";
-	UITableViewCell *cell = [self.statsTable dequeueReusableCellWithIdentifier:CellIdentifier];
+	LifetimeStatsCell *cell = [self.statsTable dequeueReusableCellWithIdentifier:CellIdentifier];
 	if(!cell) {
-		cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+		NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"LifetimeStatsCell" owner:self options:nil];
+		cell = topLevelObjects[0];
+		//cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
 	}
+	
+	cell.title.text = self.descriptions[indexPath.row];
+	cell.value.text = self.stats[indexPath.row];
+	[cell.image setImage:self.images[indexPath.row]];
 
-	UILabel *stats = [[UILabel alloc] initWithFrame:CGRectMake(7, 0, 115, 70)];
-	UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(125, 0, 220, 70)];
-	
-	cell.backgroundColor = [UICustomColors backgroundGray];
-	stats.font = [UIFont boldSystemFontOfSize:40];
-	stats.textAlignment = NSTextAlignmentCenter;
-	stats.textColor = [UIColor grayColor];
-	stats.adjustsFontSizeToFitWidth = YES;
-	stats.minimumScaleFactor = 5.0/[UIFont labelFontSize];
-	
-	description.font = [UIFont systemFontOfSize:15];
-	description.textColor = [UIColor grayColor];
-	
-	description.text = self.descriptions[indexPath.row];
-	stats.text = self.stats[indexPath.row];
-	
-	[cell addSubview:stats];
-	[cell addSubview:description];
+
+//	UILabel *stats = [[UILabel alloc] initWithFrame:CGRectMake(7, 0, 115, 70)];
+//	UILabel *description = [[UILabel alloc] initWithFrame:CGRectMake(125, 0, 220, 70)];
+//	
+//	cell.backgroundColor = [UICustomColors backgroundGray];
+//	stats.font = [UIFont boldSystemFontOfSize:40];
+//	stats.textAlignment = NSTextAlignmentCenter;
+//	stats.textColor = [UIColor grayColor];
+//	stats.adjustsFontSizeToFitWidth = YES;
+//	stats.minimumScaleFactor = 5.0/[UIFont labelFontSize];
+//	
+//	description.font = [UIFont systemFontOfSize:15];
+//	description.textColor = [UIColor grayColor];
+//	
+//	description.text = self.descriptions[indexPath.row];
+//	stats.text = self.stats[indexPath.row];
+//	
+//	[cell addSubview:stats];
+//	[cell addSubview:description];
 	
 	return cell;
 }
@@ -214,6 +224,21 @@
 			  @"TOTAL MILES",
 			  @"TOTAL WORKOUT DURATION",
 			  ] mutableCopy];
+}
+
+- (NSMutableArray *)buildImages
+{
+	UIImage *completedAct, *calories, *distance, *duration;
+	completedAct = [UIImage imageNamed:@"challenge_type_steps"];
+	calories = [UIImage imageNamed:@"challenge_type_calories"];
+	distance = [UIImage imageNamed:@"challenge_type_distance"];
+	duration = [UIImage imageNamed:@"challenge_type_time"];
+	
+	return [@[
+			  completedAct,
+			  calories,
+			  distance,
+			  duration] mutableCopy];
 }
 
 - (NSMutableArray *)buildStats

@@ -12,6 +12,12 @@
 		9E315EB91B6AC320002B3849 /* x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E315EB81B6AC320002B3849 /* x.png */; };
 		9E315EBB1B6AC416002B3849 /* UASDK.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9E315EBA1B6AC416002B3849 /* UASDK.framework */; };
 		9E315EBE1B6AC90F002B3849 /* headerCopy.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E315EBD1B6AC90F002B3849 /* headerCopy.png */; };
+		9E5D39F81B6BEA25002878D9 /* LifetimeStatsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E5D39F61B6BEA25002878D9 /* LifetimeStatsCell.m */; };
+		9E5D39F91B6BEA25002878D9 /* LifetimeStatsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E5D39F71B6BEA25002878D9 /* LifetimeStatsCell.xib */; };
+		9E5D39FD1B6BEFD9002878D9 /* challenge_type_calories@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E5D39FC1B6BEFD9002878D9 /* challenge_type_calories@3x.png */; };
+		9E5D39FF1B6BEFE3002878D9 /* challenge_type_distance@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E5D39FE1B6BEFE3002878D9 /* challenge_type_distance@3x.png */; };
+		9E5D3A011B6BEFEB002878D9 /* challenge_type_time@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E5D3A001B6BEFEB002878D9 /* challenge_type_time@3x.png */; };
+		9E5D3A031B6BF000002878D9 /* challenge_type_steps@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 9E5D3A021B6BF000002878D9 /* challenge_type_steps@3x.png */; };
 		9E95AB4A1B62B6910008C77C /* Schemas.bundle in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB491B62B6910008C77C /* Schemas.bundle */; };
 		9E95AB561B62CF730008C77C /* WorkoutCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E95AB541B62CF730008C77C /* WorkoutCell.m */; };
 		9E95AB571B62CF730008C77C /* WorkoutCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9E95AB551B62CF730008C77C /* WorkoutCell.xib */; };
@@ -79,6 +85,13 @@
 		9E315EBA1B6AC416002B3849 /* UASDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UASDK.framework; path = "../../../../Applications/UASDK-iOS-2015-01-16-2.0.28ca167/UASDK.framework"; sourceTree = "<group>"; };
 		9E315EBC1B6AC82E002B3849 /* header_logo2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = header_logo2.png; path = "../../../Documents/MMTH-Icons/mmth-png/header_logo2.png"; sourceTree = "<group>"; };
 		9E315EBD1B6AC90F002B3849 /* headerCopy.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = headerCopy.png; sourceTree = "<group>"; };
+		9E5D39F51B6BEA25002878D9 /* LifetimeStatsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LifetimeStatsCell.h; sourceTree = "<group>"; };
+		9E5D39F61B6BEA25002878D9 /* LifetimeStatsCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LifetimeStatsCell.m; sourceTree = "<group>"; };
+		9E5D39F71B6BEA25002878D9 /* LifetimeStatsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = LifetimeStatsCell.xib; sourceTree = "<group>"; };
+		9E5D39FC1B6BEFD9002878D9 /* challenge_type_calories@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_type_calories@3x.png"; sourceTree = "<group>"; };
+		9E5D39FE1B6BEFE3002878D9 /* challenge_type_distance@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_type_distance@3x.png"; sourceTree = "<group>"; };
+		9E5D3A001B6BEFEB002878D9 /* challenge_type_time@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_type_time@3x.png"; sourceTree = "<group>"; };
+		9E5D3A021B6BF000002878D9 /* challenge_type_steps@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "challenge_type_steps@3x.png"; sourceTree = "<group>"; };
 		9E95AB491B62B6910008C77C /* Schemas.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = Schemas.bundle; sourceTree = "<group>"; };
 		9E95AB4B1B62B99F0008C77C /* UASDK.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UASDK.framework; path = "../../Downloads/UASDK-iOS-2015-01-16-2.0.28ca167/UASDK.framework"; sourceTree = "<group>"; };
 		9E95AB531B62CF730008C77C /* WorkoutCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = WorkoutCell.h; sourceTree = "<group>"; };
@@ -251,6 +264,10 @@
 		9EA3E5F11B62B4B400C56D71 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				9E5D3A021B6BF000002878D9 /* challenge_type_steps@3x.png */,
+				9E5D39FC1B6BEFD9002878D9 /* challenge_type_calories@3x.png */,
+				9E5D39FE1B6BEFE3002878D9 /* challenge_type_distance@3x.png */,
+				9E5D3A001B6BEFEB002878D9 /* challenge_type_time@3x.png */,
 				9E9ED1AB1B69D755000F8CFA /* pogo_01.png */,
 				9E9ED1AC1B69D755000F8CFA /* pogo_02.png */,
 				9E9ED1AD1B69D755000F8CFA /* pogo_03.png */,
@@ -322,6 +339,9 @@
 				9E95AB531B62CF730008C77C /* WorkoutCell.h */,
 				9E95AB541B62CF730008C77C /* WorkoutCell.m */,
 				9E95AB551B62CF730008C77C /* WorkoutCell.xib */,
+				9E5D39F51B6BEA25002878D9 /* LifetimeStatsCell.h */,
+				9E5D39F61B6BEA25002878D9 /* LifetimeStatsCell.m */,
+				9E5D39F71B6BEA25002878D9 /* LifetimeStatsCell.xib */,
 			);
 			name = Views;
 			sourceTree = "<group>";
@@ -444,15 +464,19 @@
 				9E9ED1CC1B6A8085000F8CFA /* header.png in Resources */,
 				9EA3E5EF1B62B49800C56D71 /* anon@3x.png in Resources */,
 				9E95AB681B6578630008C77C /* dog.png in Resources */,
+				9E5D39FF1B6BEFE3002878D9 /* challenge_type_distance@3x.png in Resources */,
 				9E95AB6C1B6578630008C77C /* walk.png in Resources */,
 				9E9ED16A1B6924E5000F8CFA /* splash.png in Resources */,
 				9E9ED1B01B69D755000F8CFA /* pogo_02.png in Resources */,
+				9E5D3A011B6BEFEB002878D9 /* challenge_type_time@3x.png in Resources */,
 				9EA3E5EC1B62B49800C56D71 /* gear.png in Resources */,
 				9EA3E5EE1B62B49800C56D71 /* anon@2x.png in Resources */,
 				9E9ED19C1B6974FB000F8CFA /* dot.png in Resources */,
 				9EA3E6051B62B4D800C56D71 /* SettingsViewController.xib in Resources */,
 				9E315EB91B6AC320002B3849 /* x.png in Resources */,
+				9E5D39FD1B6BEFD9002878D9 /* challenge_type_calories@3x.png in Resources */,
 				9E9ED1761B692EBE000F8CFA /* SplashView.xib in Resources */,
+				9E5D39F91B6BEA25002878D9 /* LifetimeStatsCell.xib in Resources */,
 				9E95AB691B6578630008C77C /* fitness.png in Resources */,
 				9E9ED1B21B69D755000F8CFA /* pogo_04.png in Resources */,
 				9EA3E5BD1B62B13200C56D71 /* LaunchScreen.xib in Resources */,
@@ -464,6 +488,7 @@
 				9E95AB6B1B6578630008C77C /* run.png in Resources */,
 				9EA3E6021B62B4D800C56D71 /* MMTimeHopViewController.xib in Resources */,
 				9E95AB571B62CF730008C77C /* WorkoutCell.xib in Resources */,
+				9E5D3A031B6BF000002878D9 /* challenge_type_steps@3x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -526,6 +551,7 @@
 				9EA3E60B1B62B51000C56D71 /* LocalNotificationView.m in Sources */,
 				9E9ED1571B66C1ED000F8CFA /* SettingsModel.m in Sources */,
 				9EA3E6141B62B54C00C56D71 /* Conversions.m in Sources */,
+				9E5D39F81B6BEA25002878D9 /* LifetimeStatsCell.m in Sources */,
 				9EA3E60C1B62B51000C56D71 /* TableHeaderView.m in Sources */,
 				9EA3E6041B62B4D800C56D71 /* SettingsViewController.m in Sources */,
 				9EA3E5AF1B62B13200C56D71 /* main.m in Sources */,

@@ -57,8 +57,7 @@
 +(NSString *)secondsToHMS:(NSInteger)totalSeconds {
 	NSInteger hours = (totalSeconds / 3600);
 	NSInteger mins = (totalSeconds / 60) % 60;
-	NSInteger sec = totalSeconds % 60;
-	NSString *result = [NSString stringWithFormat:@"%ld:%ld:%ld", hours, mins, sec];
+	NSString *result = [NSString stringWithFormat:@"%ld hr %ld min", hours, mins];
 	
 	return result;
 }
