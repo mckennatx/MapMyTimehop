@@ -59,15 +59,6 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	self.svc.view.frame = CGRectMake(self.view.frame.origin.x, self.view.frame.origin.y, self.view.frame.size.width, [UIApplication sharedApplication].keyWindow.frame.size.height);
 	[[UIApplication sharedApplication].keyWindow addSubview:self.svc.view];
 
-//	UIImage *logo = [UIImage imageNamed:@"headerCopy"];
-//	logo.isAccessibilityElement = YES;
-//	logo.accessibilityLabel = @"MapMyTimeHop";
-//	UIImageView *imView = [[UIImageView alloc] initWithImage:logo];
-//	imView.isAccessibilityElement = YES;
-//	imView.accessibilityLabel = @"Header Image";
-//	self.navigationItem.titleView = imView;
-//	imView.frame = CGRectMake(imView.frame.origin.x, imView.frame.origin.y, imView.frame.size.width, imView.frame.size.height);
-//	imView.contentMode = UIViewContentModeScaleAspectFit;
 	self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"gear.png"] style:UIBarButtonItemStylePlain target:self action:@selector(settingsView)];
 
 	self.title = @"mapmytimehop";
@@ -91,6 +82,11 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	[self fetchUser];
 	
 	self.workouts = [[NSMutableArray alloc] init];
+	
+	[self pullWorkoutsWithBlock:^() {
+		//here
+		[self scheduleNotifications];
+	}];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateTable) name:@"reloadTable" object:nil];
 	
@@ -417,7 +413,10 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	void(^responseBlock)(UAWorkoutList *list) = ^(UAWorkoutList *list){
 		BOOL nextPageAvailable = list.nextRef != nil;
 		
-		[_listArray addObject:list.objects];
+		for(UAWorkout *workout in list.objects) {
+			[_listArray addObject:workout];
+		}
+		//[_listArray addObject:list.objects];
 
 		if(nextPageAvailable) {
 			_workoutListRef = list.nextRef;
@@ -443,6 +442,84 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	
 	requestBlock();
 }
+
+- (void)scheduleNotifications {
+	NSMutableDictionary *notifications = [[NSMutableDictionary alloc] init];
+	for(UAWorkout *workout in _listArray) {
+		NSDate *created = workout.startDatetime;
+		//set up a notification one month, one year, two year, and three years from now
+		for(int i=0; i < 4; ++i) {
+			UILocalNotification	*noty = [self notificationHelper:created date:i];
+			if(noty.fireDate != nil && [notifications objectForKey:noty.fireDate] == nil) {
+				[notifications setObject:noty forKey:noty.fireDate];
+				[[UIApplication sharedApplication] scheduleLocalNotification:noty];
+			}
+		}
+	}
+	
+	NSLog(@"number of notifications scheduled: %ld", [[[UIApplication sharedApplication] scheduledLocalNotifications] count]);
+	NSLog(@"the notifications scheduled: %@", [[UIApplication sharedApplication] scheduledLocalNotifications]);
+
+}
+- (UILocalNotification *)notificationHelper:(NSDate *)futureDate date:(timeDiff)diff {
+	UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+	localNotification.alertAction = @"Show me the workout";
+	localNotification.timeZone = [NSTimeZone defaultTimeZone];
+	localNotification.applicationIconBadgeNumber = [[UIApplication sharedApplication] applicationIconBadgeNumber] + 1;
+	
+	NSDate *today = [[NSDate alloc] init];
+	NSDate *fireDate = [self futureDate:kOneMonth date:futureDate];
+
+	switch(diff) {
+		case kOneMonth:
+			if ([fireDate earlierDate:today] != fireDate) {
+				localNotification.fireDate = fireDate;
+				localNotification.alertBody = @"View your past workout from a month ago!";
+			}
+			break;
+		case kOneYear:
+			fireDate = [self futureDate:kOneYear date:futureDate];
+			if ([fireDate earlierDate:today] != fireDate) {
+				localNotification.fireDate = fireDate;
+				localNotification.alertBody = @"View your past workout from a year ago!";
+			}
+			break;
+		case kTwoYear:
+			fireDate = [self futureDate:kTwoYear date:futureDate];
+			if ([fireDate earlierDate:today] != fireDate) {
+				localNotification.fireDate = fireDate;
+				localNotification.alertBody = @"View your past workout from two years ago!";
+			}
+			break;
+		case kThreeYear:
+			fireDate = [self futureDate:kThreeYear date:futureDate];
+			if ([fireDate earlierDate:today] != fireDate) {
+				localNotification.fireDate = fireDate;
+				localNotification.alertBody = @"View your past workout from three years ago!";
+			}
+			break;
+		default:
+			break;
+	}
+		return localNotification;
+}
+
+- (NSDate *)futureDate:(timeDiff)diff date:(NSDate*)fromDate {
+	NSCalendar *gregorian = [[NSCalendar alloc] initWithCalendarIdentifier:NSCalendarIdentifierGregorian];
+	NSDateComponents *offsetComponents = [[NSDateComponents alloc] init];
+	[offsetComponents setHour:6];
+	[offsetComponents setMinute:00];
+	
+	if(diff == kOneMonth)
+		[offsetComponents setMonth:+1]; // setting date to 1 month ahead
+	else
+		[offsetComponents setYear:+diff]; // setting year to diff
+	
+	NSDate *date = [gregorian dateByAddingComponents:offsetComponents toDate:fromDate options:0];
+	
+	return date;
+}
+
 
 #pragma mark - Memory Management
 - (void)didReceiveMemoryWarning {

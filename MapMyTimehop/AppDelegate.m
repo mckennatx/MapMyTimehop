@@ -48,7 +48,9 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 	[self setAppearance];
 	
 	[self.window makeKeyAndVisible];
-	
+
+	[[UIApplication sharedApplication] cancelAllLocalNotifications];
+
 	return YES;
 }
 
@@ -77,6 +79,11 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 	
 	[[UIBarButtonItem appearance] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14] } forState:UIControlStateNormal];
 	[[UIBarButtonItem appearance] setTitleTextAttributes:@{ NSFontAttributeName : [UIFont boldSystemFontOfSize:14] } forState:UIControlStateHighlighted];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+	application.applicationIconBadgeNumber = 0;
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application {
