@@ -375,22 +375,28 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	[[[UA sharedInstance] userManager] fetchAuthenticatedUser:^(UAUser *user, NSError *error) {
 		if(!error) {
 			[[SettingsModel sharedInstance] setUser:user];
-			[self fetchAllTimeStats];
+			[self fetchStats:UAAggregationPeriodTypeLifetime];
+			[self fetchStats:UAAggregationPeriodTypeWeek];
 		}
 	}];
 }
 
-- (void)fetchAllTimeStats
+- (void)fetchStats:(NSInteger)aggregationPeriod
 {
 	UAUserRef *userRef = [UAUserRef userRefWithUserID:[SettingsModel sharedInstance].user.userID];
-	UAUserStatsReportRef *userStatsReportRef = [UAUserStatsReportRef userStatsReportRefForUserRef:userRef dateRange:nil aggregationPeriod:UAAggregationPeriodTypeLifetime includeSummaryStats:YES];
+	UAUserStatsReportRef *userStatsReportRef = [UAUserStatsReportRef userStatsReportRefForUserRef:userRef dateRange:nil aggregationPeriod:aggregationPeriod includeSummaryStats:YES];
 	
 	UAUserStatsManager *manager = [[UA sharedInstance] userStatsManager];
 	[manager fetchUserStatsWithRef:userStatsReportRef response:^(id object, NSError *error) {
 		UAUserStatsReport *response = (UAUserStatsReport*)object;
 		if (error == nil) {
 			if (response.summary.count > 0) {
-				[[SettingsModel sharedInstance] setLifetimeSummary:[response.summary firstObject]];
+				if(aggregationPeriod == UAAggregationPeriodTypeLifetime) {
+					[[SettingsModel sharedInstance] setLifetimeSummary:[response.summary firstObject]];
+				}
+				else {
+					[[SettingsModel sharedInstance] setWeeklySummary:[response.summary firstObject]];
+				}
 			}
 		}
 	}];
@@ -412,7 +418,7 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 		BOOL nextPageAvailable = list.nextRef != nil;
 		
 		[_listArray addObject:list.objects];
-		
+
 		if(nextPageAvailable) {
 			_workoutListRef = list.nextRef;
 			requestBlock();

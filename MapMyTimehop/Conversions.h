@@ -15,5 +15,7 @@
 + (NSString *)rollupStringForNumber:(NSNumber*)number;
 + (double)convertJoulesToCalories:(double)joules;
 +(NSString *)secondsToHMS:(NSInteger)totalSeconds;
++ (NSString *)paceInUserUnitsString:(double)paceInSecsPerMeter;
++ (double)paceInMinutesPerUserUnits:(double)paceInSecsPerMeter;
 
 @end

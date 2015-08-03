@@ -12,7 +12,6 @@
 #import "Conversions.h"
 #import "UICustomColors.h"
 #import "SettingsModel.h"
-#import "LifetimeStatsCell.h"
 #import "LifeTimeCollectionCell.h"
 #import "SelectedStatCell.h"
 
@@ -37,10 +36,10 @@
 @property (nonatomic, assign) BOOL finishedLoading;
 
 @property (strong, nonatomic) IBOutlet UICollectionView *statsCollection;
-@property (weak, nonatomic) IBOutlet UITableView *statsTable;
 
 @property (nonatomic, copy) NSArray	*descriptions;
 @property (nonatomic, copy) NSArray *stats;
+@property (nonatomic, copy) NSArray *selectedStats;
 @property (nonatomic, copy) NSArray *images;
 @property (nonatomic, copy) NSArray *selectedCellTitle;
 
@@ -63,11 +62,12 @@
 	self.avatar.layer.cornerRadius = self.avatar.frame.size.width /2;
 	self.avatar.layer.masksToBounds = YES;
 
-	self.descriptions = [self buildDescriptions];
-	self.stats = [self buildStats];
+	self.descriptions = [self buildTitles:YES];
+	self.stats = [self buildStats:YES];
 	self.images = [self buildImages];
-	self.selectedCellTitle = [self buildTitles];
-	
+	self.selectedCellTitle = [self buildTitles:NO];
+	self.selectedStats	= [self buildStats:NO];
+
 	[self.statsCollection registerClass:[LifeTimeCollectionCell class] forCellWithReuseIdentifier:@"CollectionCell"];
 	
 	UINib *nib = [UINib nibWithNibName:@"LifeTimeCollectionCell" bundle:nil];
@@ -79,9 +79,7 @@
 		   forCellWithReuseIdentifier:@"SelectedCell"];
 	
 	self.view.backgroundColor = [UICustomColors backgroundGray];
-	self.statsTable.backgroundColor = [UICustomColors backgroundGray];
 	self.statsCollection.backgroundColor = [UICustomColors backgroundGray];
-	self.statsTable.rowHeight = [LifetimeStatsCell rowHeight];
 
 	self.navigationBar = [[UINavigationBar alloc] initWithFrame:CGRectMake(0, 0,[[UIApplication sharedApplication] keyWindow].frame.size.width, 64)];
 	self.navigationItem.title = @"Settings";
@@ -111,7 +109,6 @@
 	self.location.text = [NSString stringWithFormat:@"%@, %@", user.locality, user.region];
 	
 	[self.avatar setImageWithURL:user.userProfilePhoto.largeImageUrl placeholderImage:[UIImage imageNamed:@"anon"]];
-	[self.statsTable reloadData];
 }
 
 - (IBAction)logout:(id)sender {
@@ -123,7 +120,6 @@
 											 style:UIAlertActionStyleDestructive
 										   handler:^(UIAlertAction *action) {
 											   [[UA sharedInstance] logout:^(NSError *error) {
-												   //erase everything
 												   [SettingsModel sharedInstance].user = nil;
 												   [SettingsModel sharedInstance].lifetimeSummary = nil;
 												   [SettingsModel sharedInstance].allWorkoutsLoaded = NO;
@@ -192,7 +188,6 @@
 	return CGSizeMake(160, 160);
 }
 
-// The cell that is returned must be retrieved from a call to -dequeueReusableCellWithReuseIdentifier:forIndexPath:
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
 	static NSString *CellIdentifier = @"CollectionCell";
@@ -216,35 +211,31 @@
 }
 
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
-	static NSString *CellIdentifier = @"SelectedCell";
+	static NSString *CellIdentifier = @"CollectionCell";
 	
-	SelectedStatCell *statCell= [self.statsCollection dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
+	LifeTimeCollectionCell *statCell= [self.statsCollection dequeueReusableCellWithReuseIdentifier:CellIdentifier forIndexPath:indexPath];
 	
 	LifeTimeCollectionCell* cell = (LifeTimeCollectionCell *)[collectionView cellForItemAtIndexPath:indexPath];
 
 	statCell.title.text = self.selectedCellTitle[cell.index];
+	statCell.stats.text = self.selectedStats[cell.index];
+	[statCell.image setImage:self.images[cell.index]];
+	
+	statCell.title.adjustsFontSizeToFitWidth = YES;
+
 	self.dontHighlight = YES;
-	[UIView animateWithDuration:1.0
-						  delay:0
-						options:(UIViewAnimationOptionAllowUserInteraction)
-					 animations:^{
-							 [UIView transitionFromView:cell.contentView
-												 toView:statCell.contentView
-											   duration:.5
-												options:UIViewAnimationOptionTransitionFlipFromLeft
-											 completion:^(BOOL finished){
-											 }];
-					 }
-	 
-					 completion:^(BOOL finished){
-						 double delayInSeconds = 2.0;
-						 dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
-						 dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
-							 [self reset:cell dismiss:statCell];
-						 });
-						 
-					 }];
-	}
+	[UIView transitionFromView:cell.contentView
+						toView:statCell.contentView
+					  duration:.5
+					   options:UIViewAnimationOptionTransitionFlipFromLeft
+					completion:^(BOOL finished){
+						double delayInSeconds = 2.0;
+						dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
+						dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
+							[self reset:cell dismiss:statCell];
+						});
+					}];
+}
 
 - (void)reset:(UICollectionViewCell *)cell dismiss:(UICollectionViewCell *)dismissCell {
 		[UIView transitionFromView:dismissCell.contentView
@@ -263,39 +254,6 @@
 	return true;
 }
 
-
-
-#pragma mark - Table view data source
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
-	return 1;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-	return [self.descriptions count];
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-	
-	static NSString *CellIdentifier = @"Cell";
-	LifetimeStatsCell *cell = [self.statsTable dequeueReusableCellWithIdentifier:CellIdentifier];
-	
-	if(!cell) {
-		NSArray *topLevelObjects = [[NSBundle mainBundle] loadNibNamed:@"LifetimeStatsCell" owner:self options:nil];
-		cell = topLevelObjects[0];
-		//cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-	}
-	
-	cell.title.text = self.descriptions[indexPath.row];
-	cell.value.text = self.stats[indexPath.row];
-	[cell.image setImage:self.images[indexPath.row]];
-	
-	return cell;
-}
-
-
 #pragma mark - Memory Management
 - (void)didReceiveMemoryWarning {
 	[super didReceiveMemoryWarning];
@@ -305,23 +263,33 @@
 	self.stats = nil;
 }
 
-- (NSMutableArray *)buildDescriptions
+- (NSMutableArray *)buildTitles:(BOOL)lifetime
 {
+	NSString *distance;
+	
+	if(lifetime) {
+		distance = @"total miles";
+		if([SettingsModel sharedInstance].user.displayMeasurementSystem == UADisplayMeasurementMetric) {
+			distance = @"total kilometers";
+		}
+		return [@[
+				  @"completed activities",
+				  @"total calories burned",
+				  distance,
+				  @"total workout duration",
+				  ] mutableCopy];
+	}
+	
+	distance = @"weekly miles";
+	if([SettingsModel sharedInstance].user.displayMeasurementSystem == UADisplayMeasurementMetric) {
+		distance = @"weekly kilometers";
+	}
+	
 	return [@[
-			  @"completed activities",
-			  @"total calories burned",
-			  @"total miles",
-			  @"total workout duration",
-			  ] mutableCopy];
-}
-
-- (NSMutableArray *)buildTitles
-{
-	return [@[
-			  @"activities",
-			  @"calories",
-			  @"distance",
-			  @"duration",
+			  @"weekly completed activities",
+			  @"weekly calories burned",
+			  distance,
+			  @"weekly workout duration",
 			  ] mutableCopy];
 }
 
@@ -340,15 +308,21 @@
 			  duration] mutableCopy];
 }
 
-- (NSMutableArray *)buildStats
+- (NSMutableArray *)buildStats:(BOOL)lifetime
 {
-	UAUserStats *lifetimeSum = [SettingsModel sharedInstance].lifetimeSummary;
+	UAUserStats *statsSum;
+	if(lifetime)
+		statsSum = [SettingsModel sharedInstance].lifetimeSummary;
+	else
+		statsSum = [SettingsModel sharedInstance].weeklySummary;
+
 	NSString *activityCount, *calories, *distance, *duration;
 	
-	activityCount = [lifetimeSum.activityCount stringValue];
-	calories = [Conversions rollupStringForNumber:@([Conversions convertJoulesToCalories:[lifetimeSum.energy doubleValue]])];
-	distance = [Conversions rollupStringForNumber:@([Conversions distanceInUserUnits:[lifetimeSum.distance doubleValue] measurement:self.user.displayMeasurementSystem])];
-	duration = [Conversions secondsToHMS:[lifetimeSum.duration integerValue]];
+	activityCount = [statsSum.activityCount stringValue];
+	calories = [Conversions rollupStringForNumber:@([Conversions convertJoulesToCalories:[statsSum.energy doubleValue]])];
+	distance = [Conversions rollupStringForNumber:@([Conversions distanceInUserUnits:[statsSum.distance doubleValue] measurement:[SettingsModel sharedInstance].user.displayMeasurementSystem])];
+	
+	duration = [Conversions secondsToHMS:[statsSum.duration integerValue]];
 	
 	return [@[
 			  activityCount,

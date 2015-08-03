@@ -7,6 +7,7 @@
 //
 
 #import "Conversions.h"
+#define MILES_PER_METER .000621371192
 
 @implementation Conversions
 
@@ -18,7 +19,7 @@
 	} else {
 		distanceInUserUnits /= 1000;
 	}
-	
+
 	return distanceInUserUnits;
 }
 
@@ -52,6 +53,39 @@
 + (double)convertJoulesToCalories:(double)joules
 {
 	return joules * 0.000239005736;
+}
+
++ (NSString *)paceInUserUnitsString:(double)paceInSecsPerMeter {
+	double secsPerUnit = [self paceInMinutesPerUserUnits:paceInSecsPerMeter] * 60;
+	
+	int min = (int)(secsPerUnit/60);
+	int seconds = ((int)secsPerUnit%60);
+	
+	if(min > 60 || min <= 0 || fabs(paceInSecsPerMeter) == INFINITY) {
+		return NSLocalizedString(@"-", nil);
+	}
+	
+	return [NSString localizedStringWithFormat:@"%d:%02d", min, seconds];
+}
+
++ (double)paceInMinutesPerUserUnits:(double)paceInSecsPerMeter {
+	double paceInUserUnits;
+	
+//	if([UserManager sharedInstance].authedUser.displayMeasurementSystem == UADisplayMeasurementImperial) {
+		double secsPerMin = 60;
+		double metersPerMile = 1609.344;
+		paceInUserUnits = (paceInSecsPerMeter == 0) ? 0 : paceInSecsPerMeter / secsPerMin * metersPerMile;
+//	}
+//	else {
+//		paceInUserUnits = (paceInSecsPerMeter == 0) ? 0 : paceInSecsPerMeter / 60 * 1000;
+//	}
+
+	// Negative paces are impossible.
+	if(paceInUserUnits < 0) {
+		paceInUserUnits = 0;
+	}
+	
+	return paceInUserUnits;
 }
 
 +(NSString *)secondsToHMS:(NSInteger)totalSeconds {

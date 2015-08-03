@@ -63,23 +63,6 @@ static NSString* const kHikePath = @"hike.png";
 	[self activitiesToDisplayWithBlock: ^ {
 		
 	}];
-	UARouteManager *manager = [UA sharedInstance].routeManager;
-	[manager fetchRouteWithRef:workout.routeRef withDetails:YES response:^(UARoute *object, NSError *error) {
-		if (!error)
-		{
-			UARoute *route = object;
-			if (route)
-			{
-				NSURL *url = [route thumbnailUrlWithWidth:300 height:100];
-//				UIImageView *routeMap = [[UIImageView alloc] initWithFrame:CGRectMake(5, 200, 300, 100)];
-//				[routeMap setImageWithURL:url];
-//				routeMap.contentMode = UIViewContentModeScaleAspectFit;
-//				[self addSubview:routeMap];
-				NSLog(@"%@", url);
-				return;
-			}
-		}
-	}];
 	
 	self.workoutName.text = [workout workoutName];
 	

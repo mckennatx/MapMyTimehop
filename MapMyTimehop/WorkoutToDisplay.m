@@ -12,7 +12,6 @@
 @interface WorkoutToDisplay ()
 
 @property (nonatomic, retain) UAWorkoutListRef *workoutListRef;
-@property (nonatomic, copy) UAActivityTypeReference *ref;
 
 @property (nonatomic, copy) NSDate *filterDate;
 
