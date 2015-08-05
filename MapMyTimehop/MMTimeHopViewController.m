@@ -93,6 +93,7 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggedOut) name:@"loggedOut" object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismiss) name:@"dismiss" object:nil];
+	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -280,7 +281,7 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 		workout = [UIAlertAction actionWithTitle:@"Record a Workout"
 										   style:UIAlertActionStyleDefault
 										   handler:^(UIAlertAction *action) {
-											   NSURL *url = [NSURL URLWithString:@"mmapps://"];
+											   NSURL *url = [NSURL URLWithString:@"mmapps://record"];
 											   if([[UIApplication sharedApplication] canOpenURL:url]) {
 												   [[UIApplication sharedApplication] openURL:url];
 											   } else {

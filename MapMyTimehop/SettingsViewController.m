@@ -162,7 +162,7 @@
 }
 
 - (IBAction)openApp:(id)sender {
-	NSURL *url = [NSURL URLWithString:@"mmapps://"];
+	NSURL *url = [NSURL URLWithString:@"mmapps://record"];
 	if([[UIApplication sharedApplication] canOpenURL:url]) {
 		[[UIApplication sharedApplication] openURL:url];
 	} else {

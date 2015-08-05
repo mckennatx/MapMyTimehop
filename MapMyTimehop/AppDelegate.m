@@ -50,6 +50,7 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 	[self.window makeKeyAndVisible];
 
 	[[UIApplication sharedApplication] cancelAllLocalNotifications];
+	application.applicationIconBadgeNumber = 0;
 
 	return YES;
 }
@@ -85,6 +86,13 @@ NSString * const kUASKAPIRecorderTypeKey = nil;
 {
 	application.applicationIconBadgeNumber = 0;
 }
+
+- (void)application:(UIApplication *)application handleActionWithIdentifier:(NSString *)identifier forLocalNotification:(UILocalNotification *)notification completionHandler:(void(^)())completionHandler
+{
+	
+	application.applicationIconBadgeNumber = 0;
+}
+
 
 - (void)applicationWillResignActive:(UIApplication *)application {
 	// Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
