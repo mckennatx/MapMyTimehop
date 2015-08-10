@@ -31,11 +31,11 @@
 		self.hasPastWorkoutFromTodaysDate = NO;
 		self.pastWorkoutsFromDate = [[NSMutableArray alloc] init];
 		self.pastWorkoutsList = [[NSMutableArray alloc] init];
+		
 		[self workoutsToDisplayWithBlock:^{
 			self.loadedWorkouts = YES;
 			[self parseWorkouts];
 			[[NSNotificationCenter defaultCenter] postNotificationName:@"reloadTable" object:nil];
-
 		}];
 	}
 	return self;

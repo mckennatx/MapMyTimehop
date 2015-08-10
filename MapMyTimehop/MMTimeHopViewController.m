@@ -93,7 +93,6 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(loggedOut) name:@"loggedOut" object:nil];
 	
 	[[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(dismiss) name:@"dismiss" object:nil];
-	
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -176,7 +175,6 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 }
 
 
-
 #pragma mark - Table view data source
 -(UIView *) tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section {
 	UIView *view = [[UIView alloc] initWithFrame:CGRectMake(0, 0, tableView.frame.size.width, 18)];
@@ -202,8 +200,11 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	[label setTextColor:[UIColor grayColor]];
 	[label setTextAlignment:NSTextAlignmentCenter];
 	
-	if([SettingsModel sharedInstance].allWorkoutsLoaded)
-		label.text = [NSString stringWithFormat:@"TOTAL CALORIES BURNED: %d", (int) [[self.workouts objectAtIndex:section]totalCalories]];
+	if([SettingsModel sharedInstance].allWorkoutsLoaded) {
+		WorkoutToDisplay *wo = [self.workouts objectAtIndex:section];
+		if([wo hasPastWorkoutFromTodaysDate])
+			label.text = [NSString stringWithFormat:@"TOTAL CALORIES BURNED: %d", (int) [[self.workouts objectAtIndex:section]totalCalories]];
+	}
 	
 	[view addSubview:label];
 	
@@ -217,7 +218,14 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 
 -(CGFloat)tableView:(UITableView *)tableView heightForFooterInSection:
 (NSInteger)section{
-	return 38.0f;
+	
+	if([SettingsModel sharedInstance].allWorkoutsLoaded) {
+		WorkoutToDisplay *wo = [self.workouts objectAtIndex:section];
+		if([wo hasPastWorkoutFromTodaysDate])
+			return 38.0f;
+	}
+	
+	return 0;
 }
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
@@ -250,11 +258,17 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 	}
 	
 	if([SettingsModel sharedInstance].allWorkoutsLoaded) {
-		if([[self.workouts objectAtIndex:indexPath.section] hasPastWorkoutFromTodaysDate]) {
-			[cell setWorkout:[[[self.workouts objectAtIndex:indexPath.section] pastWorkoutsFromDate] objectAtIndex:indexPath.row]];
-		}
-		else
+		self.tableView.rowHeight = [WorkoutCell cellHeight];
+		WorkoutToDisplay *wo = [self.workouts objectAtIndex:indexPath.section];
+		if([wo hasPastWorkoutFromTodaysDate]) {
+			if([[[wo pastWorkoutsFromDate] objectAtIndex:indexPath.row] routeRef] != nil) {
+				self.tableView.rowHeight = 200;
+			}
+			[cell setWorkout:[[wo pastWorkoutsFromDate] objectAtIndex:indexPath.row]];
+		}else {
+			self.tableView.rowHeight = 50;
 			[cell setNoWorkout];
+		}
 	}
 	return cell;
 }
@@ -458,8 +472,8 @@ static NSString *kWorkoutDetails = @"mmapps://workouts/details/?id=%@";
 		}
 	}
 	
-	NSLog(@"number of notifications scheduled: %ld", [[[UIApplication sharedApplication] scheduledLocalNotifications] count]);
-	NSLog(@"the notifications scheduled: %@", [[UIApplication sharedApplication] scheduledLocalNotifications]);
+	//NSLog(@"number of notifications scheduled: %ld", [[[UIApplication sharedApplication] scheduledLocalNotifications] count]);
+	//NSLog(@"the notifications scheduled: %@", [[UIApplication sharedApplication] scheduledLocalNotifications]);
 
 }
 - (UILocalNotification *)notificationHelper:(NSDate *)futureDate date:(timeDiff)diff {

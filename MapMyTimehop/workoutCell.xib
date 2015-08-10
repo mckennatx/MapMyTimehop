@@ -18,7 +18,7 @@
                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="R44-zc-8zO" userLabel="background">
                         <rect key="frame" x="8" y="7" width="49" height="49"/>
                     </imageView>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2t2-JU-WJG" userLabel="workoutName">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2t2-JU-WJG" userLabel="workoutName">
                         <rect key="frame" x="70" y="8" width="267" height="21"/>
                         <constraints>
                             <constraint firstAttribute="height" constant="21" id="MBq-rz-M0G"/>
@@ -27,7 +27,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total Distance:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fM6-2H-Tlj">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fM6-2H-Tlj">
                         <rect key="frame" x="70" y="20" width="98" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="98" id="5LF-Fp-4em"/>
@@ -36,13 +36,13 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Activity Type:" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y2I-ma-B2O">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="y2I-ma-B2O">
                         <rect key="frame" x="70" y="37" width="98" height="21"/>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lj1-Ik-vL5" userLabel="distanceVal">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="lj1-Ik-vL5" userLabel="distanceVal">
                         <rect key="frame" x="174" y="20" width="130" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="130" id="4K0-Ax-fhm"/>
@@ -51,7 +51,7 @@
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6j-Ee-eRk" userLabel="activityType">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h6j-Ee-eRk" userLabel="activityType">
                         <rect key="frame" x="174" y="37" width="138" height="21"/>
                         <fontDescription key="fontDescription" type="system" weight="light" pointSize="12"/>
                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -88,11 +88,7 @@
                 </constraints>
             </tableViewCellContentView>
             <connections>
-                <outlet property="activityLabel" destination="y2I-ma-B2O" id="9Yc-YU-qhp"/>
-                <outlet property="activityType" destination="h6j-Ee-eRk" id="Iw5-nh-xtn"/>
                 <outlet property="background" destination="R44-zc-8zO" id="m8Y-f9-snN"/>
-                <outlet property="distanceLabel" destination="fM6-2H-Tlj" id="fRF-ea-qgm"/>
-                <outlet property="distanceVal" destination="lj1-Ik-vL5" id="BWE-yw-N8c"/>
                 <outlet property="workoutName" destination="2t2-JU-WJG" id="lRm-3t-iDg"/>
             </connections>
             <point key="canvasLocation" x="222" y="164"/>

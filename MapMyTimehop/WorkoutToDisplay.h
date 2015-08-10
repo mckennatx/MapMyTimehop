@@ -14,6 +14,8 @@
 @interface WorkoutToDisplay : NSObject
 
 @property (nonatomic, assign) BOOL hasPastWorkoutFromTodaysDate;
+@property (nonatomic, assign) BOOL hasRoute;
+
 @property (nonatomic, retain) NSMutableArray *pastWorkoutsFromDate;
 
 - (instancetype)initWithFilterDate:(NSDate *)filter;

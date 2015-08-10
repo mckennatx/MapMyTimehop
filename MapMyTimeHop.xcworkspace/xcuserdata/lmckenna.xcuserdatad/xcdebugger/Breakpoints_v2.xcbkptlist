@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "MapMyTimeHop/MMTimeHopViewController.m"
-            timestampString = "460314070.98686"
+            timestampString = "460911159.39489"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "467"
-            endingLineNumber = "467">
+            startingLineNumber = "592"
+            endingLineNumber = "592">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
